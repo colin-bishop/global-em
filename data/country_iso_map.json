@@ -1,0 +1,113 @@
+{
+  "GBR": "GBR",
+  "GB": "GBR",
+  "UK": "GBR",
+  "SCT": "GBR",
+  "Scotland": "GBR",
+  "England": "GBR",
+  "United Kingdom": "GBR",
+  "Great Britain": "GBR",
+
+  "US": "USA",
+  "USA": "USA",
+  "United States": "USA",
+  "United States of America": "USA",
+
+  "CA": "CAN",
+  "CAN": "CAN",
+  "Canada": "CAN",
+
+  "DK": "DNK",
+  "DNK": "DNK",
+  "Denmark": "DNK",
+  "Danmark": "DNK",
+
+  "FR": "FRA",
+  "FRA": "FRA",
+  "France": "FRA",
+  "FRANCE": "FRA",
+
+  "SE": "SWE",
+  "SWE": "SWE",
+  "Sweden": "SWE",
+
+  "FI": "FIN",
+  "FIN": "FIN",
+  "Finland": "FIN",
+
+  "CY": "CYP",
+  "CYP": "CYP",
+  "Cyprus": "CYP",
+
+  "BE": "BEL",
+  "BEL": "BEL",
+  "Belgium": "BEL",
+
+  "EE": "EST",
+  "EST": "EST",
+  "Estonia": "EST",
+
+  "PT": "PRT",
+  "PRT": "PRT",
+  "Portugal": "PRT",
+
+  "NO": "NOR",
+  "NOR": "NOR",
+  "Norway": "NOR",
+
+  "IS": "ISL",
+  "ISL": "ISL",
+  "Iceland": "ISL",
+
+  "NZ": "NZL",
+  "NZL": "NZL",
+  "New Zealand": "NZL",
+
+  "AU": "AUS",
+  "AUS": "AUS",
+  "Australia": "AUS",
+
+  "JP": "JPN",
+  "JPN": "JPN",
+  "Japan": "JPN",
+
+  "KR": "KOR",
+  "KOR": "KOR",
+  "South Korea": "KOR",
+
+  "ZA": "ZAF",
+  "ZAF": "ZAF",
+  "South Africa": "ZAF",
+
+  "CL": "CHL",
+  "CHL": "CHL",
+  "Chile": "CHL",
+
+  "PE": "PER",
+  "PER": "PER",
+  "Peru": "PER",
+
+  "AR": "ARG",
+  "ARG": "ARG",
+  "Argentina": "ARG",
+
+  "BR": "BRA",
+  "BRA": "BRA",
+  "Brazil": "BRA",
+
+  "NL": "NLD",
+  "NLD": "NLD",
+  "Netherlands": "NLD",
+
+  "DE": "DEU",
+  "DEU": "DEU",
+  "Germany": "DEU",
+
+  "ES": "ESP",
+  "ESP": "ESP",
+  "Spain": "ESP",
+
+  "IE": "IRL",
+  "IRL": "IRL",
+  "Ireland": "IRL"
+}

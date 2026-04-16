@@ -1,0 +1,33 @@
+# Dependencies
+app/node_modules/
+
+# Build output
+app/dist/
+
+# Environment — never commit secrets
+.env
+.env.local
+.env.*.local
+
+# Raw survey data — not committed
+data/*.xlsx
+data/*.csv
+
+# EEZ source data (large — only the processed output is committed)
+data/eez_raw/
+*.zip
+*.shp
+*.dbf
+*.shx
+*.prj
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
