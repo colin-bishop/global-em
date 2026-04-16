@@ -2,7 +2,7 @@
 
 Interactive web dashboard for the ICES Working Group on Technology in Fisheries Data collection (WGTIFD) Electronic Monitoring programme inventory. Visualises global EM programmes on a world map, coloured by EM vessel count, with filtering and programme detail panels.
 
-**Live site:** [em4.fish](https://em4.fish)  
+**Live site:** [map.em4.fish](https://map.em4.fish)  
 **Data backend:** Supabase (PostgreSQL)  
 **Source data:** ICES WGTIFD EM Programme Survey (Microsoft Forms → Excel)
 
@@ -83,6 +83,8 @@ Open [http://localhost:5173](http://localhost:5173).
 
 ## Deployment
 
+> **Note:** em4.fish runs WordPress. The dashboard is deployed to the subdomain **map.em4.fish** so the two sites coexist independently.
+
 ### Option A — Netlify (recommended)
 
 Netlify connects to GitHub and redeploys automatically on every push.
@@ -108,45 +110,47 @@ Netlify connects to GitHub and redeploys automatically on every push.
 
 4. Click **Deploy site**. Netlify will build and publish the app.
 
-5. **Point your domain:** In your domain registrar's DNS settings, add:
+5. **Point the subdomain:** In your domain registrar's DNS settings (wherever em4.fish is managed), add a CNAME for `map`:
 
    ```
    Type   Name   Value
-   CNAME  @      your-site-name.netlify.app
+   CNAME  map    your-site-name.netlify.app
    ```
 
-   Then in Netlify go to **Domain management → Add a domain** and enter `em4.fish`. Netlify provisions a free TLS certificate automatically.
+   Then in Netlify go to **Domain management → Add a domain** and enter `map.em4.fish`. Netlify provisions a free TLS certificate automatically. The WordPress site at `em4.fish` is unaffected.
 
 ### Option B — Cloudflare Pages
 
-Best if your DNS is already managed by Cloudflare (zero-downtime domain connection).
+Best if em4.fish DNS is already managed by Cloudflare.
 
 1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**
 2. Select `colin-bishop/global-em`
 3. Build settings — same as Netlify above (`app` / `npm run build` / `app/dist`)
 4. Add the two `VITE_` environment variables
-5. Under **Custom domains**, add `em4.fish` — Cloudflare handles DNS and TLS automatically
+5. Under **Custom domains**, add `map.em4.fish` — Cloudflare handles DNS and TLS automatically
 
-### Option C — Static file upload (any web host)
+### Option C — Subdirectory on the WordPress host
 
-If em4.fish already has traditional shared hosting (cPanel, FTP):
+If you prefer to keep everything on the same host, the app can live at `em4.fish/map/`.
 
-```bash
-cd app
-npm run build          # outputs to app/dist/
-```
+1. Build with the subdirectory base path:
 
-Upload the **contents** of `app/dist/` to your web root (`public_html/` or `www/`). Repeat after every change.
+   ```bash
+   cd app
+   VITE_BASE_PATH=/map/ npm run build
+   ```
 
-### Subdirectory hosting
+2. Upload the contents of `app/dist/` to a `map/` folder in your WordPress web root (e.g. `public_html/map/` via FTP or cPanel File Manager).
 
-If the app lives at a path like `em4.fish/globalem/` rather than the root, set:
+3. Add a rule to WordPress's `.htaccess` so WordPress doesn't intercept requests to `/map/`:
 
-```
-VITE_BASE_PATH=/globalem/
-```
+   ```apache
+   # Before the WordPress block — allow /map/ to serve static files
+   RewriteCond %{REQUEST_URI} ^/map/
+   RewriteRule ^ - [L]
+   ```
 
-before building. Leave it unset (or blank) for root hosting.
+   Repeat the upload after every change (no auto-deploy with this option).
 
 ---
 
