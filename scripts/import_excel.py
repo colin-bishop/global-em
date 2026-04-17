@@ -290,12 +290,15 @@ def main():
     from supabase import create_client
     sb = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-    print(f'\nUpserting {len(records)} records to Supabase...')
-    # Insert in batches of 20
+    print(f'\nClearing existing programmes from database...')
+    sb.table('programs').delete().filter('id', 'not.is', 'null').execute()
+    print('  Cleared.')
+
+    print(f'Inserting {len(records)} records...')
     batch_size = 20
     for i in range(0, len(records), batch_size):
         batch = records[i:i + batch_size]
-        result = sb.table('programs').insert(batch).execute()
+        sb.table('programs').insert(batch).execute()
         print(f'  Inserted rows {i+1}–{min(i+batch_size, len(records))}')
 
     print('\nDone.')

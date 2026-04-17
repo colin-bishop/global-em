@@ -1,5 +1,24 @@
 import React from 'react'
 
+// Vessel range bucket lookup — mirrors MapView VESSEL_RANGE_BUCKETS
+const VESSEL_BUCKETS = [
+  { label: '<5',          max: 4    },
+  { label: '5–10',        max: 10   },
+  { label: '10–20',       max: 20   },
+  { label: '20–50',       max: 50   },
+  { label: '50–100',      max: 100  },
+  { label: '100–200',     max: 200  },
+  { label: '200–500',     max: 500  },
+  { label: '500–1,000',   max: 1000 },
+  { label: '1,000–2,000', max: 2000 },
+  { label: '2,000+',      max: null },
+]
+function toVesselRange(n) {
+  if (!n || n <= 0) return null
+  const b = VESSEL_BUCKETS.find(b => b.max == null ? true : n <= b.max)
+  return b?.label ?? String(n)
+}
+
 const REGULATION_BADGE = {
   'Under Regulation - Mandatory':  'bg-red-900/40 text-red-300 border-red-800',
   'Under Regulation - Optional':   'bg-yellow-900/40 text-yellow-300 border-yellow-800',
@@ -118,7 +137,7 @@ export default function ProgramDetail({ program: p, onClose }) {
 
         <Section title="Fleet & gear">
           <Field label="Fleet size (total)"  value={p.fleet_size_total} />
-          <Field label="Vessels with EM"     value={p.fleet_size_em} />
+          <Field label="Vessels with EM"     value={toVesselRange(p.fleet_size_em) ?? p.fleet_size_em} />
           <Field label="Vessel size range"   value={p.vessel_size_range} />
           <Field label="EM vessel size"      value={p.vessel_size_em} />
           <Field label="Gear types"          value={p.gear_types} />

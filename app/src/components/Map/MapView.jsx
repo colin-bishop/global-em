@@ -10,9 +10,28 @@ const BLUES = ['#eff3ff', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5',
 // Color for countries with programmes but no vessel count data
 const HAS_PROGRAMS_COLOR = '#9ecae1'
 
+// Vessel range labels in ascending order — used to bucket aggregated midpoint sums
+const VESSEL_RANGE_BUCKETS = [
+  { label: '<5',          min: 0,    max: 4    },
+  { label: '5–10',        min: 5,    max: 10   },
+  { label: '10–20',       min: 10,   max: 20   },
+  { label: '20–50',       min: 20,   max: 50   },
+  { label: '50–100',      min: 50,   max: 100  },
+  { label: '100–200',     min: 100,  max: 200  },
+  { label: '200–500',     min: 200,  max: 500  },
+  { label: '500–1,000',   min: 500,  max: 1000 },
+  { label: '1,000–2,000', min: 1000, max: 2000 },
+  { label: '2,000+',      min: 2000, max: null },
+]
+
+function vesselRangeLabel(total) {
+  if (!total || total <= 0) return null
+  const bucket = VESSEL_RANGE_BUCKETS.find(b => b.max == null ? total >= b.min : total <= b.max)
+  return bucket?.label ?? '2,000+'
+}
+
 function parseVessels(program) {
-  // Use only the integer fleet_size_em column — fleet_size_total is free text (ranges, notes)
-  // and cannot be reliably parsed for summation.
+  // fleet_size_em stores the midpoint of the selected range (or 0)
   return (program.fleet_size_em != null && program.fleet_size_em > 0) ? program.fleet_size_em : 0
 }
 
@@ -44,13 +63,15 @@ function buildColorExpression(countryData, maxVessels) {
 }
 
 function countryTooltipHTML(programs) {
-  const vessels = programs.reduce((sum, p) => sum + parseVessels(p), 0)
+  const totalVessels = programs.reduce((sum, p) => sum + parseVessels(p), 0)
+  const rangeLabel = vesselRangeLabel(totalVessels)
+  const vesselStr = rangeLabel ? ` &middot; ~${rangeLabel} EM vessels` : ''
   const names = programs.slice(0, 3).map(p => `<li style="color:#cbd5e1">${p.programme_name}</li>`).join('')
   const more = programs.length > 3 ? `<li style="color:#64748b">+ ${programs.length - 3} more…</li>` : ''
   return `
     <div style="min-width:190px;font-family:sans-serif">
       <div style="font-weight:600;font-size:12px;margin-bottom:6px;color:#f1f5f9">
-        ${programs.length} programme${programs.length > 1 ? 's' : ''}${vessels ? ` &middot; ${vessels} EM vessels` : ''}
+        ${programs.length} programme${programs.length > 1 ? 's' : ''}${vesselStr}
       </div>
       <ul style="margin:0;padding-left:14px;font-size:11px;line-height:1.6">
         ${names}${more}

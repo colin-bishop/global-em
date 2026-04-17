@@ -4,6 +4,8 @@ import FilterPanel from './components/Filters/FilterPanel'
 import ProgramDetail from './components/Programs/ProgramDetail'
 import ProgramList from './components/Programs/ProgramList'
 import SubmitForm from './components/Submit/SubmitForm'
+import AdminPanel from './components/Admin/AdminPanel'
+import TableView from './components/Table/TableView'
 
 export const INITIAL_FILTERS = {
   isActive: null,       // null = all, true, false
@@ -48,12 +50,14 @@ export default function App() {
         </div>
         <nav className="flex gap-1">
           {[
-            { key: 'map', label: 'Map View' },
+            { key: 'map',    label: 'Map'    },
+            { key: 'table',  label: 'Table'  },
             { key: 'submit', label: 'Add / Edit Programme' },
+            { key: 'admin',  label: 'Admin'  },
           ].map(({ key, label }) => (
             <button
               key={key}
-              onClick={() => setActiveTab(key)}
+              onClick={() => { setActiveTab(key); setSelectedProgram(null) }}
               className={`px-4 py-1.5 rounded text-sm font-medium transition-colors ${
                 activeTab === key
                   ? 'bg-cyan-700 text-white'
@@ -116,10 +120,66 @@ export default function App() {
         </div>
       )}
 
+      {/* ── Table tab ── */}
+      {activeTab === 'table' && (
+        <div className="flex-1 flex overflow-hidden">
+
+          {/* Filter sidebar */}
+          <div
+            className="flex-shrink-0 bg-[#0d1f3c] border-r border-[#1e3a5f] overflow-hidden transition-all duration-200"
+            style={{ width: filtersOpen ? '17rem' : 0 }}
+          >
+            <FilterPanel
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onClear={clearFilters}
+            />
+          </div>
+
+          {/* Table */}
+          <div className="flex-1 relative min-w-0 overflow-hidden flex flex-col">
+            <button
+              onClick={() => setFiltersOpen(f => !f)}
+              className="absolute top-3 left-3 z-10 bg-[#0d1f3c] border border-[#1e3a5f] rounded px-2 py-1 text-xs text-slate-300 hover:text-white hover:border-cyan-500 transition-colors"
+            >
+              {filtersOpen ? '◀ Filters' : '▶ Filters'}
+            </button>
+            <div className="flex-1 overflow-hidden pt-0">
+              <TableView filters={filters} onSelectProgram={setSelectedProgram} />
+            </div>
+          </div>
+
+          {/* Detail panel */}
+          {selectedProgram && (
+            <div className="flex-shrink-0 w-96 bg-[#0d1f3c] border-l border-[#1e3a5f] overflow-y-auto">
+              {Array.isArray(selectedProgram) ? (
+                <ProgramList
+                  programs={selectedProgram}
+                  onSelect={setSelectedProgram}
+                  onClose={() => setSelectedProgram(null)}
+                />
+              ) : (
+                <ProgramDetail
+                  program={selectedProgram}
+                  onClose={() => setSelectedProgram(null)}
+                />
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* ── Submit tab ── */}
       {activeTab === 'submit' && (
         <div className="flex-1 overflow-auto">
           <SubmitForm />
+        </div>
+      )}
+
+      {/* ── Admin tab ── */}
+      {activeTab === 'admin' && (
+        <div className="flex-1 overflow-auto">
+          <AdminPanel />
         </div>
       )}
     </div>
