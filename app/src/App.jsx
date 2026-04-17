@@ -39,7 +39,7 @@ export default function App() {
       <header className="flex-shrink-0 bg-[#0d1f3c] border-b border-[#1e3a5f] px-4 py-2.5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img
-            src="https://www.ices.dk/_layouts/15/1033/images/icesimg/iceslogo.png?rev=40"
+            src="/iceslogo.png"
             alt="ICES"
             className="h-8 w-auto"
           />
