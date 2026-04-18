@@ -51,6 +51,7 @@ function PendingCard({ program: p, onApprove, onReject, actioning }) {
         <Field label="Gear types" value={p.gear_types} />
         <Field label="Programme type" value={p.programme_type} />
         <Field label="Contact" value={p.primary_contact} />
+        <Field label="Contact email" value={p.primary_contact_email} />
         <Field label="Areas" value={p.areas_of_operation} />
         {p.objectives && (
           <>

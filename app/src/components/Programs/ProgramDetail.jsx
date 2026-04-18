@@ -119,6 +119,8 @@ export default function ProgramDetail({ program: p, onClose }) {
           <Field label="End date"       value={p.end_date} />
           <Field label="Reference year" value={p.reference_year} />
           <Field label="Organizations"  value={p.organizations} />
+          <Field label="Contact"        value={p.primary_contact} />
+          <Field label="Contact email"  value={p.primary_contact_email} />
           {p.web_links && (
             <div className="grid gap-x-3 text-xs" style={{ gridTemplateColumns: '130px 1fr' }}>
               <dt className="text-slate-500 pt-0.5">Web links</dt>

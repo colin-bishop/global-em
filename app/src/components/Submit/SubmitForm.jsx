@@ -1445,6 +1445,7 @@ const EMPTY = {
   // Contact metadata
   organizations: [],
   primary_contact: '',
+  primary_contact_email: '',
   web_links: '',
 }
 
@@ -1534,7 +1535,8 @@ function formFromProgram(p) {
     end_date:          p.end_date || '',
     is_active:         p.is_active ?? false,
     organizations:     split(p.organizations),
-    primary_contact:   p.primary_contact || '',
+    primary_contact:       p.primary_contact || '',
+    primary_contact_email: p.primary_contact_email || '',
     web_links:         p.web_links || '',
 
     target_species:    toSpecies(p.target_species),
@@ -1751,7 +1753,8 @@ export default function SubmitForm() {
       is_active:         form.is_active,
       reference_year:    new Date().getFullYear(),
       organizations:     form.organizations.length ? form.organizations.join('; ') : null,
-      primary_contact:   form.primary_contact.trim() || null,
+      primary_contact:         form.primary_contact.trim() || null,
+      primary_contact_email:   form.primary_contact_email.trim() || null,
       web_links:         form.web_links.trim() || null,
 
       target_species:    form.target_species.length ? form.target_species.map(s => s.a).join('; ') : null,
@@ -1938,7 +1941,8 @@ export default function SubmitForm() {
       <Divider label="Contact & links" />
       <OrgSelect label="Organisations involved" value={form.organizations} onChange={set('organizations')}
         hint="Lead agency, data provider, etc. Select existing or type to add new." />
-      <Input label="Primary contact (name & email)" value={form.primary_contact} onChange={set('primary_contact')} />
+      <Input label="Primary contact name" value={form.primary_contact} onChange={set('primary_contact')} placeholder="First Last" />
+      <Input label="Primary contact email" value={form.primary_contact_email} onChange={set('primary_contact_email')} type="email" placeholder="name@organisation.org" />
       <Input label="Web links / publications" value={form.web_links} onChange={set('web_links')} placeholder="https://…" />
 
       {mode !== 'edit' && form.programme_name.length >= 4 && (
