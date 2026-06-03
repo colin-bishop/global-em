@@ -53,9 +53,10 @@ exports.handler = async (event) => {
     const refData = await ghGet(token, `/repos/${REPO}/git/refs/heads/main`)
     const mainSha = refData.object.sha
 
-    const slug   = (submission.programme_name || 'program')
+    const slug      = (submission.programme_name || 'program')
       .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40)
-    const branch = `submissions/${slug}-${id.slice(0, 8)}`
+    const branchId  = randomUUID().slice(0, 8)
+    const branch    = `submissions/${slug}-${branchId}`
 
     await ghPost(token, `/repos/${REPO}/git/refs`, { ref: `refs/heads/${branch}`, sha: mainSha })
 
