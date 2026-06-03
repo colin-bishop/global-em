@@ -2,214 +2,64 @@ import React, { useState, useMemo, useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import { fetchPrograms } from '../../lib/programs'
 import DuplicateCheck from './DuplicateCheck'
+import SCHEMA from '../../form-schema.json'
 
-// ── Option lists (matching WGTIFD survey exactly) ──────────────────────────────
+// ── Derive option lists from form-schema.json ─────────────────────────────────
+// Edit options in src/form-schema.json — not here.
 
-const GEAR_OPTIONS = [
-  'Dredges [DRB]',
-  'Bottom trawls [OTB, OTT, PTB, TBB]',
-  'Pelagic trawls [OTM, PTM]',
-  'Rods and lines [LHP, LHM, LTL]',
-  'Longlines [LLD, LLS]',
-  'Traps [FPO, FYK, FPN]',
-  'Nets [GTR, GNS, GND]',
-  'Surrounding nets [PS, LA]',
-  'Seines [SSC, SDN, SPR, SB, SV]',
-  'Other',
-]
+const fieldOpts = key => SCHEMA.fields.find(f => f.key === key)?.options ?? []
+const fieldOptsStr = key => fieldOpts(key).map(o => typeof o === 'string' ? o : o.label)
 
-const PROGRAMME_TYPE_OPTIONS = [
-  'Onshore commercial',
-  'Offshore commercial',
-  'Research surveys at sea',
-]
-
-const EM_REGULATION_OPTIONS = [
-  'Under Regulation - Mandatory',
-  'Under Regulation - Optional',
-  'Non-Regulation - Voluntary',
-  'Other please specify in additional information',
-]
-
-const SUPPLIER_MODEL_OPTIONS = [
-  'Agency selected/Approved - Multiple suppliers',
-  'Agency selected/Approved - Single supplier',
-  'Industry selected - Multiple suppliers',
-  'Industry selected - Single supplier',
-]
-
-const PROCUREMENT_OPTIONS = [
-  'Regulator/Agency',
-  'Industry',
-  'Other third party',
-]
-
-const REVIEW_MODEL_OPTIONS = [
-  'Agency only',
-  '3rd party only',
-  '3rd party & Agency',
-]
-
-const DATA_TRANSMISSION_OPTIONS = [
-  'Physical receipt (hard drives)',
-  'Remote upload - automatic',
-  'Remote upload - on-demand',
-]
-
-const SECONDARY_TRANSMISSION_OPTIONS = [
-  'Physical receipt',
-  'FTP/Web server upload',
-]
-
-const PROCESSED_SUBMISSION_OPTIONS = [
-  'Physical receipt',
-  'API',
-]
-
-const VIDEO_IMAGERY_OPTIONS = [
-  { value: 'no',     label: 'No' },
-  { value: 'video',  label: 'Video' },
-  { value: 'images', label: 'Still images' },
-  { value: 'both',   label: 'Video and images' },
-]
-
-const VIDEO_RECORDING_OPTIONS = [
-  'Continuous',
-  'Continuous when there is sufficient light for video recording',
-  'Interrupted according to sensor data (e.g. triggered by winch operation)',
-  'Interrupted according to instructions provided to vessel operators',
-]
-
-const RECORDING_CONFIG_OPTIONS = [
-  { value: 'video',  label: 'Video' },
-  { value: 'images', label: 'Still images' },
-  { value: 'both',   label: 'Both video and still images' },
-]
-
-const VIDEO_SELECTION_OPTIONS = [
-  'Census (all reviewed)',
-  'Random sampling',
-  'Stratified sampling',
-  'Other',
-]
-
-const SAMPLING_UNIT_OPTIONS = [
-  'Time period(s)',
-  'Vessel(s)',
-  'Vessel trip(s)',
-  'Haul(s)',
-  'Other',
-]
-
-const SAMPLING_COVERAGE_OPTIONS = [
-  '<10%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%', 'Other',
-]
-
-const CATCH_STAGE_OPTIONS = [
-  'Hauling',
-  'Pre-sorting',
-  'Sorting',
-  'Sorted',
-]
-
-const SPECIES_SAMPLED_OPTIONS = [
-  'All taxa',
-  'One/some group(s) of taxa',
-  'Specific taxa only',
-]
-// Options that require species detail entry
+const GEAR_OPTIONS               = fieldOptsStr('gear_types')
+const PROGRAMME_TYPE_OPTIONS     = fieldOptsStr('programme_type')
+const EM_REGULATION_OPTIONS      = fieldOptsStr('em_regulation')
+const SUPPLIER_MODEL_OPTIONS     = fieldOptsStr('supplier_model')
+const PROCUREMENT_OPTIONS        = fieldOptsStr('procurement_entity')
+const REVIEW_MODEL_OPTIONS       = fieldOptsStr('review_model')
+const DATA_TRANSMISSION_OPTIONS  = fieldOptsStr('data_transmission_primary')
+const SECONDARY_TRANSMISSION_OPTIONS = fieldOptsStr('data_transmission_secondary')
+const PROCESSED_SUBMISSION_OPTIONS   = fieldOptsStr('processed_data_submission')
+const VIDEO_IMAGERY_OPTIONS      = fieldOpts('video_imagery')
+const VIDEO_RECORDING_OPTIONS    = fieldOptsStr('video_recording_type')
+const RECORDING_CONFIG_OPTIONS   = fieldOpts('recording_config')
+const VIDEO_SELECTION_OPTIONS    = fieldOptsStr('video_selection_method')
+const SAMPLING_UNIT_OPTIONS      = fieldOptsStr('sampling_unit_primary')
+const SAMPLING_COVERAGE_OPTIONS  = fieldOptsStr('sampling_coverage_primary')
+const CATCH_STAGE_OPTIONS        = fieldOptsStr('catch_observation_stage')
+const SPECIES_SAMPLED_OPTIONS    = fieldOptsStr('target_species_sampled')
 const SPECIES_SAMPLED_NEEDS_DETAIL = new Set(['One/some group(s) of taxa', 'Specific taxa only'])
+const SPECIES_ID_OPTIONS         = fieldOptsStr('species_id_resolution')
+const LENGTH_OPTIONS             = fieldOptsStr('length_measurements')
+const SEX_OPTIONS                = fieldOptsStr('sex_collected')
+const PRIMARY_REVIEWER_OPTIONS   = fieldOptsStr('primary_reviewer')
+const DATA_OWNER_OPTIONS         = fieldOptsStr('data_owner')
+const DATA_STORAGE_OPTIONS       = fieldOptsStr('data_storage_location')
+const AI_STATUS_OPTIONS          = fieldOpts('ai_status')
+const AI_ASSETS_OPTIONS          = fieldOptsStr('ai_assets_available')
+const AI_STAGE_OPTIONS           = fieldOptsStr('ai_review_stage')
+const AI_TRAINING_SIZE_OPTIONS   = fieldOptsStr('ai_training_data_size')
 
-const SPECIES_ID_OPTIONS = [
-  'Same level for all taxa and groups of taxa',
-  'Different levels for different taxa/groups of taxa',
+// ── Vessel count ranges (labels from schema; min/max for midpoint calculation) ─
+
+const VESSEL_RANGE_META = [
+  { label: '<5',          min: 0,    max: 4    },
+  { label: '5–10',        min: 5,    max: 10   },
+  { label: '10–20',       min: 10,   max: 20   },
+  { label: '20–50',       min: 20,   max: 50   },
+  { label: '50–100',      min: 50,   max: 100  },
+  { label: '100–200',     min: 100,  max: 200  },
+  { label: '200–500',     min: 200,  max: 500  },
+  { label: '500–1,000',   min: 500,  max: 1000 },
+  { label: '1,000–2,000', min: 1000, max: 2000 },
+  { label: '2,000+',      min: 2000, max: null },
 ]
-
-const LENGTH_OPTIONS = [
-  'Yes, for all taxa/groups of taxa, with no limit',
-  'Yes, for all taxa/groups of taxa, with a maximum limit',
-  'Yes, only for some taxa/groups of taxa, with no limit',
-  'Yes, only for some taxa/groups of taxa, with a maximum limit',
-  'No',
-]
-
-const SEX_OPTIONS = [
-  'Yes, for all taxa/groups of taxa where externally possible',
-  'Yes, for some taxa/groups of taxa where externally possible',
-  'No',
-]
-
-const PRIMARY_REVIEWER_OPTIONS = [
-  'Science agency',
-  'Compliance agency',
-  'Both Science and compliance agencies',
-  'Third party - compliance',
-  'Third party - science',
-  'Third party - both',
-]
-
-const DATA_OWNER_OPTIONS = ['Agency', 'Industry', '3rd party', 'Other']
-
-const DATA_STORAGE_OPTIONS = [
-  'Project/programme specific',
-  'EM specific',
-  'National integrated',
-  'Regional integrated',
-  'Other',
-]
-
-const AI_STATUS_OPTIONS = [
-  { value: 'development', label: 'In development' },
-  { value: 'operational', label: 'Operational (give details in Additional information)' },
-  { value: 'no',          label: 'No' },
-]
-
-const AI_ASSETS_OPTIONS = [
-  'Yes - upon request',
-  'Yes - publicly available',
-  'No',
-]
-
-const AI_STAGE_OPTIONS = [
-  'Processing of sensor data',
-  'Processing of video data - catch review',
-  'Processing of video data - quality assurance',
-  'Other',
-]
-
-const AI_TRAINING_SIZE_OPTIONS = [
-  '<500', '500–1,000', '1,000–5,000', '5,000–10,000', '>10,000',
-]
-
-// ── Vessel count ranges ───────────────────────────────────────────────────────
-
-const VESSEL_RANGES = [
-  { label: '<5',         min: 0,    max: 4    },
-  { label: '5–10',       min: 5,    max: 10   },
-  { label: '10–20',      min: 10,   max: 20   },
-  { label: '20–50',      min: 20,   max: 50   },
-  { label: '50–100',     min: 50,   max: 100  },
-  { label: '100–200',    min: 100,  max: 200  },
-  { label: '200–500',    min: 200,  max: 500  },
-  { label: '500–1,000',  min: 500,  max: 1000 },
-  { label: '1,000–2,000',min: 1000, max: 2000 },
-  { label: '2,000+',     min: 2000, max: null },
-]
-
-const VESSEL_SIZE_RANGES = [
-  '<7m', '7–10m', '10–15m', '15–20m', '20–30m',
-  '30–40m', '40–50m', '50–75m', '75–100m', '100m+',
-]
-
-const TRIP_DURATIONS = [
-  '1 day', '2–3 days', '4–6 days', '7–10 days', '11–15 days',
-  '16–20 days', '21–30 days', '31–60 days', '61–90 days',
-  '91–120 days', '121–180 days', '180+ days',
-]
+const VESSEL_RANGES      = VESSEL_RANGE_META
+const VESSEL_SIZE_RANGES = fieldOptsStr('vessel_size_range')
+const TRIP_DURATIONS     = fieldOptsStr('trip_duration')
 
 // midpoint for map colouring — 2000+ uses 3000 as representative value
 function rangeMidpoint(label) {
-  const r = VESSEL_RANGES.find(v => v.label === label)
+  const r = VESSEL_RANGE_META.find(v => v.label === label)
   if (!r) return 0
   return r.max == null ? 3000 : Math.round((r.min + r.max) / 2)
 }

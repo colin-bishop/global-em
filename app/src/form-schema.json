@@ -1,0 +1,834 @@
+{
+  "version": "1.0",
+  "_comment": "Source of truth for the Add/Edit Programme form. Steps, fields, controlled vocabularies, and display conditions are all defined here. The form renderer reads options and structure from this file — add or modify options here rather than in SubmitForm.jsx.",
+
+  "steps": [
+    { "id": "contact",   "label": "Contact",         "description": "Submitter contact details" },
+    { "id": "basics",    "label": "Programme basics", "description": "Programme identity and dates" },
+    { "id": "fishery",   "label": "The fishery",      "description": "Target species, gear and fleet" },
+    { "id": "programme", "label": "EM programme",     "description": "Programme structure and technology" },
+    { "id": "sampling",  "label": "Sampling design",  "description": "Video, sensors and review — shown only when video/imagery is collected" },
+    { "id": "data",      "label": "Data use",         "description": "Data ownership, storage and governance" },
+    { "id": "ai",        "label": "AI / ML",          "description": "Artificial intelligence components" }
+  ],
+
+  "fields": [
+
+    {
+      "key": "submitter_name",
+      "step": "contact",
+      "label": "Your name",
+      "type": "text",
+      "required": true,
+      "db_column": null,
+      "_comment": "Submitter contact — stored in submissions table only, not programmes"
+    },
+    {
+      "key": "submitter_email",
+      "step": "contact",
+      "label": "Your email",
+      "type": "email",
+      "required": true,
+      "db_column": null
+    },
+    {
+      "key": "submitter_organization",
+      "step": "contact",
+      "label": "Your organization",
+      "type": "text",
+      "required": false,
+      "db_column": null
+    },
+
+    {
+      "key": "programme_name",
+      "step": "basics",
+      "label": "Programme name",
+      "type": "text",
+      "required": true,
+      "db_column": "programme_name"
+    },
+    {
+      "key": "country",
+      "step": "basics",
+      "label": "Country",
+      "type": "country-select",
+      "required": true,
+      "db_column": ["country_raw", "country_iso"],
+      "_comment": "Typeahead over full UN country list. Stores { name, iso3 }; mapped to country_raw + country_iso on submit."
+    },
+    {
+      "key": "start_date",
+      "step": "basics",
+      "label": "Start date",
+      "type": "date",
+      "required": false,
+      "db_column": "start_date"
+    },
+    {
+      "key": "is_active",
+      "step": "basics",
+      "label": "Currently active?",
+      "type": "tri-toggle",
+      "required": false,
+      "db_column": "is_active"
+    },
+    {
+      "key": "end_date",
+      "step": "basics",
+      "label": "End date",
+      "type": "date",
+      "required": false,
+      "db_column": "end_date",
+      "show_if": { "is_active": false }
+    },
+    {
+      "key": "organizations",
+      "step": "basics",
+      "label": "Organizations involved",
+      "type": "org-select",
+      "required": false,
+      "db_column": "organizations",
+      "_comment": "Multi-value typeahead seeded from existing DB values; allows free-text additions. Stored as semicolon-delimited string."
+    },
+    {
+      "key": "primary_contact",
+      "step": "basics",
+      "label": "Primary contact name",
+      "type": "text",
+      "required": false,
+      "db_column": "primary_contact"
+    },
+    {
+      "key": "primary_contact_email",
+      "step": "basics",
+      "label": "Primary contact email",
+      "type": "email",
+      "required": false,
+      "db_column": "primary_contact_email"
+    },
+    {
+      "key": "web_links",
+      "step": "basics",
+      "label": "Web links",
+      "type": "text",
+      "required": false,
+      "db_column": "web_links",
+      "_comment": "Space-separated URLs"
+    },
+    {
+      "key": "reference_year",
+      "step": "basics",
+      "label": "Reference year",
+      "type": "number",
+      "required": false,
+      "db_column": "reference_year"
+    },
+
+    {
+      "key": "target_species",
+      "step": "fishery",
+      "label": "Target species",
+      "type": "species-select",
+      "required": false,
+      "db_column": "target_species",
+      "_comment": "ASFIS species list typeahead. Stored as semicolon-delimited ASFIS alpha-3 codes."
+    },
+    {
+      "key": "bycatch_species",
+      "step": "fishery",
+      "label": "Bycatch / ETP species of concern",
+      "type": "species-select",
+      "required": false,
+      "db_column": "bycatch_species",
+      "_comment": "Same ASFIS lookup but with a curated ETP shortlist shown on focus."
+    },
+    {
+      "key": "gear_types",
+      "step": "fishery",
+      "label": "Gear types",
+      "type": "checkbox",
+      "required": false,
+      "db_column": "gear_types",
+      "options": [
+        "Dredges [DRB]",
+        "Bottom trawls [OTB, OTT, PTB, TBB]",
+        "Pelagic trawls [OTM, PTM]",
+        "Rods and lines [LHP, LHM, LTL]",
+        "Longlines [LLD, LLS]",
+        "Traps [FPO, FYK, FPN]",
+        "Nets [GTR, GNS, GND]",
+        "Surrounding nets [PS, LA]",
+        "Seines [SSC, SDN, SPR, SB, SV]",
+        "Other"
+      ]
+    },
+    {
+      "key": "fleet_size_total",
+      "step": "fishery",
+      "label": "Total fleet size",
+      "type": "chip",
+      "required": false,
+      "db_column": "fleet_size_total",
+      "options": ["<5", "5–10", "10–20", "20–50", "50–100", "100–200", "200–500", "500–1,000", "1,000–2,000", "2,000+"]
+    },
+    {
+      "key": "vessel_size_range",
+      "step": "fishery",
+      "label": "Vessel size range",
+      "type": "chip-multi",
+      "required": false,
+      "db_column": "vessel_size_range",
+      "options": ["<7m", "7–10m", "10–15m", "15–20m", "20–30m", "30–40m", "40–50m", "50–75m", "75–100m", "100m+"]
+    },
+    {
+      "key": "areas_of_operation",
+      "step": "fishery",
+      "label": "Areas of operation",
+      "type": "area-picker",
+      "required": false,
+      "db_column": "areas_of_operation",
+      "_comment": "Interactive map picker. Encodes FAO major areas (numeric), EEZ zones (EEZ:ISO3), ICES divisions (ICES:code) as semicolon-delimited string."
+    },
+    {
+      "key": "trip_duration",
+      "step": "fishery",
+      "label": "Typical trip duration",
+      "type": "chip",
+      "required": false,
+      "db_column": "trip_duration",
+      "options": ["1 day", "2–3 days", "4–6 days", "7–10 days", "11–15 days", "16–20 days", "21–30 days", "31–60 days", "61–90 days", "91–120 days", "121–180 days", "180+ days"]
+    },
+    {
+      "key": "flag_states",
+      "step": "fishery",
+      "label": "Flag states",
+      "type": "flag-states",
+      "required": false,
+      "db_column": "flag_states",
+      "_comment": "Multi-country typeahead over full country list. Stored as semicolon-delimited ISO-3 codes."
+    },
+
+    {
+      "key": "em_regulation",
+      "step": "programme",
+      "label": "Regulation status",
+      "type": "radio",
+      "required": true,
+      "db_column": "em_regulation",
+      "options": [
+        "Under Regulation - Mandatory",
+        "Under Regulation - Optional",
+        "Non-Regulation - Voluntary",
+        "Other please specify in additional information"
+      ]
+    },
+    {
+      "key": "programme_type",
+      "step": "programme",
+      "label": "Programme type",
+      "type": "checkbox",
+      "required": false,
+      "db_column": "programme_type",
+      "options": [
+        "Onshore commercial",
+        "Offshore commercial",
+        "Research surveys at sea"
+      ]
+    },
+    {
+      "key": "objectives",
+      "step": "programme",
+      "label": "Programme objectives",
+      "type": "textarea",
+      "required": false,
+      "db_column": "objectives"
+    },
+    {
+      "key": "full_rem_coverage",
+      "step": "programme",
+      "label": "Full REM coverage?",
+      "type": "tri-toggle",
+      "required": false,
+      "db_column": "full_rem_coverage"
+    },
+    {
+      "key": "fleet_size_em",
+      "step": "programme",
+      "label": "Fleet size with EM",
+      "type": "chip",
+      "required": false,
+      "db_column": "fleet_size_em",
+      "options": ["<5", "5–10", "10–20", "20–50", "50–100", "100–200", "200–500", "500–1,000", "1,000–2,000", "2,000+"],
+      "_comment": "Stored as the midpoint integer of the selected range, not the label string."
+    },
+    {
+      "key": "vessel_size_em",
+      "step": "programme",
+      "label": "EM vessel size range",
+      "type": "chip-multi",
+      "required": false,
+      "db_column": "vessel_size_em",
+      "options": ["<7m", "7–10m", "10–15m", "15–20m", "20–30m", "30–40m", "40–50m", "50–75m", "75–100m", "100m+"]
+    },
+    {
+      "key": "supplier_model",
+      "step": "programme",
+      "label": "Supplier model",
+      "type": "radio",
+      "required": false,
+      "db_column": "supplier_model",
+      "options": [
+        "Agency selected/Approved - Single supplier",
+        "Agency selected/Approved - Multiple suppliers",
+        "Industry selected - Single supplier",
+        "Industry selected - Multiple suppliers"
+      ]
+    },
+    {
+      "key": "hardware_provider",
+      "step": "programme",
+      "label": "Hardware provider",
+      "type": "org-select",
+      "required": false,
+      "db_column": "hardware_provider"
+    },
+    {
+      "key": "procurement_entity",
+      "step": "programme",
+      "label": "Procurement entity",
+      "type": "radio",
+      "required": false,
+      "db_column": "procurement_entity",
+      "options": [
+        "Regulator/Agency",
+        "Industry",
+        "Other third party"
+      ]
+    },
+    {
+      "key": "review_model",
+      "step": "programme",
+      "label": "Review model",
+      "type": "radio",
+      "required": false,
+      "db_column": "review_model",
+      "options": [
+        "Agency only",
+        "3rd party only",
+        "3rd party & Agency"
+      ]
+    },
+    {
+      "key": "data_transmission_primary",
+      "step": "programme",
+      "label": "Primary data transmission method",
+      "type": "checkbox",
+      "required": false,
+      "db_column": "data_transmission_primary",
+      "options": [
+        "Physical receipt (hard drives)",
+        "Remote upload - automatic",
+        "Remote upload - on-demand"
+      ]
+    },
+    {
+      "key": "data_transmission_secondary",
+      "step": "programme",
+      "label": "Secondary data transmission method",
+      "type": "radio",
+      "required": false,
+      "db_column": "data_transmission_secondary",
+      "show_if": { "review_model": "3rd party & Agency" },
+      "options": [
+        "Physical receipt",
+        "FTP/Web server upload"
+      ]
+    },
+    {
+      "key": "processed_data_submission",
+      "step": "programme",
+      "label": "Processed data submission",
+      "type": "radio",
+      "required": false,
+      "db_column": "processed_data_submission",
+      "options": [
+        "Physical receipt",
+        "API"
+      ]
+    },
+    {
+      "key": "additional_sensors",
+      "step": "programme",
+      "label": "Additional sensors?",
+      "type": "tri-toggle",
+      "required": false,
+      "db_column": "additional_sensors"
+    },
+    {
+      "key": "sensor_types",
+      "step": "programme",
+      "label": "Sensor types",
+      "type": "org-select",
+      "required": false,
+      "db_column": "sensor_types",
+      "show_if": { "additional_sensors": true }
+    },
+    {
+      "key": "sensor_transmission_frequency",
+      "step": "programme",
+      "label": "Sensor transmission frequency",
+      "type": "text",
+      "required": false,
+      "db_column": "sensor_transmission_frequency",
+      "show_if": { "additional_sensors": true }
+    },
+    {
+      "key": "video_imagery",
+      "step": "programme",
+      "label": "Collects video or imagery?",
+      "type": "radio",
+      "required": false,
+      "db_column": ["collects_video", "collects_images"],
+      "_comment": "Transforms: 'video' → collects_video=true, collects_images=false; 'images' → false/true; 'both' → true/true; 'no' → false/false",
+      "options": [
+        { "value": "no",     "label": "No" },
+        { "value": "video",  "label": "Video" },
+        { "value": "images", "label": "Still images" },
+        { "value": "both",   "label": "Video and images" }
+      ]
+    },
+    {
+      "key": "cameras_per_vessel",
+      "step": "programme",
+      "label": "Cameras per vessel",
+      "type": "camera-range",
+      "required": false,
+      "db_column": ["cameras_per_vessel_min", "cameras_per_vessel_max"],
+      "_comment": "Accepts single integer or dash-separated range (e.g. '2-6'). Mapped to min/max on submit."
+    },
+    {
+      "key": "video_transmission_frequency",
+      "step": "programme",
+      "label": "Video transmission frequency",
+      "type": "text",
+      "required": false,
+      "db_column": "video_transmission_frequency"
+    },
+    {
+      "key": "dcf_programme",
+      "step": "programme",
+      "label": "Part of a Data Collection Framework (DCF) programme?",
+      "type": "tri-toggle",
+      "required": false,
+      "db_column": "dcf_programme"
+    },
+
+    {
+      "key": "recording_config",
+      "step": "sampling",
+      "label": "Recording medium",
+      "type": "radio",
+      "required": false,
+      "db_column": "recording_config",
+      "_comment": "Step 'sampling' is only shown when video_imagery != 'no'",
+      "options": [
+        { "value": "video",  "label": "Video" },
+        { "value": "images", "label": "Still images" },
+        { "value": "both",   "label": "Both video and still images" }
+      ]
+    },
+    {
+      "key": "video_recording_type",
+      "step": "sampling",
+      "label": "Video recording trigger",
+      "type": "radio",
+      "required": false,
+      "db_column": "video_recording_type",
+      "show_if": { "recording_config": ["Video", "Both video and still images"] },
+      "options": [
+        "Continuous",
+        "Continuous when there is sufficient light for video recording",
+        "Interrupted according to sensor data (e.g. video recording is triggered by winch operation; specify in the additional information field)",
+        "Interrupted according to instructions provided to the vessel operators (please give details in the additional information field)"
+      ]
+    },
+    {
+      "key": "image_capture_config",
+      "step": "sampling",
+      "label": "Image capture configuration",
+      "type": "text",
+      "required": false,
+      "db_column": "image_capture_config",
+      "show_if": { "recording_config": ["Still images", "Both video and still images"] }
+    },
+    {
+      "key": "video_selection_method",
+      "step": "sampling",
+      "label": "Video selection method",
+      "type": "radio",
+      "required": false,
+      "db_column": "video_selection_method",
+      "options": [
+        "Census (all reviewed)",
+        "Random sampling",
+        "Stratified sampling",
+        "Other"
+      ]
+    },
+    {
+      "key": "quality_thresholds",
+      "step": "sampling",
+      "label": "Quality thresholds",
+      "type": "textarea",
+      "required": false,
+      "db_column": "quality_thresholds"
+    },
+    {
+      "key": "video_used_for_commercial_catch",
+      "step": "sampling",
+      "label": "Video used for commercial catch accounting?",
+      "type": "tri-toggle",
+      "required": false,
+      "db_column": "video_used_for_commercial_catch"
+    },
+    {
+      "key": "programme_monitoring",
+      "step": "sampling",
+      "label": "Programme monitoring focus",
+      "type": "text",
+      "required": false,
+      "db_column": "programme_monitoring",
+      "show_if": { "video_used_for_commercial_catch": false }
+    },
+    {
+      "key": "review_objectives",
+      "step": "sampling",
+      "label": "Review objectives",
+      "type": "textarea",
+      "required": false,
+      "db_column": "review_objectives"
+    },
+    {
+      "key": "sampling_unit_primary",
+      "step": "sampling",
+      "label": "Primary sampling unit",
+      "type": "radio",
+      "required": false,
+      "db_column": "sampling_unit_primary",
+      "options": ["Time period(s)", "Vessel(s)", "Vessel trip(s)", "Haul(s)", "Other"]
+    },
+    {
+      "key": "sampling_coverage_primary",
+      "step": "sampling",
+      "label": "Primary sampling coverage",
+      "type": "radio",
+      "required": false,
+      "db_column": "sampling_coverage_primary",
+      "options": ["<10%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%", "Other"]
+    },
+    {
+      "key": "sampling_unit_secondary",
+      "step": "sampling",
+      "label": "Secondary sampling unit",
+      "type": "radio",
+      "required": false,
+      "db_column": "sampling_unit_secondary",
+      "options": ["Time period(s)", "Vessel(s)", "Vessel trip(s)", "Haul(s)", "Other"]
+    },
+    {
+      "key": "sampling_coverage_secondary",
+      "step": "sampling",
+      "label": "Secondary sampling coverage",
+      "type": "radio",
+      "required": false,
+      "db_column": "sampling_coverage_secondary",
+      "options": ["<10%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%", "Other"]
+    },
+    {
+      "key": "sampling_unit_tertiary",
+      "step": "sampling",
+      "label": "Tertiary sampling unit",
+      "type": "radio",
+      "required": false,
+      "db_column": "sampling_unit_tertiary",
+      "options": ["Time period(s)", "Vessel(s)", "Vessel trip(s)", "Haul(s)", "Other"]
+    },
+    {
+      "key": "sampling_coverage_tertiary",
+      "step": "sampling",
+      "label": "Tertiary sampling coverage",
+      "type": "radio",
+      "required": false,
+      "db_column": "sampling_coverage_tertiary",
+      "options": ["<10%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%", "Other"]
+    },
+    {
+      "key": "catch_observation_stage",
+      "step": "sampling",
+      "label": "Catch observation stage",
+      "type": "checkbox",
+      "required": false,
+      "db_column": "catch_observation_stage",
+      "options": ["Hauling", "Pre-sorting", "Sorting", "Sorted"]
+    },
+    {
+      "key": "target_species_sampled",
+      "step": "sampling",
+      "label": "Target species sampled",
+      "type": "radio",
+      "required": false,
+      "db_column": "target_species_sampled",
+      "options": [
+        "All taxa",
+        "One/some group(s) of taxa",
+        "Specific taxa only"
+      ]
+    },
+    {
+      "key": "bycatch_species_sampled",
+      "step": "sampling",
+      "label": "Bycatch / ETP species sampled",
+      "type": "radio",
+      "required": false,
+      "db_column": "bycatch_species_sampled",
+      "options": [
+        "All taxa",
+        "One/some group(s) of taxa",
+        "Specific taxa only"
+      ]
+    },
+    {
+      "key": "species_id_resolution",
+      "step": "sampling",
+      "label": "Species ID resolution",
+      "type": "radio",
+      "required": false,
+      "db_column": "species_id_resolution",
+      "options": [
+        "Same level for all taxa and groups of taxa",
+        "Different levels for different taxa/groups of taxa"
+      ]
+    },
+    {
+      "key": "length_measurements",
+      "step": "sampling",
+      "label": "Length measurements",
+      "type": "radio",
+      "required": false,
+      "db_column": "length_measurements",
+      "options": [
+        "Yes, for all taxa/groups of taxa, with no limit",
+        "Yes, for all taxa/groups of taxa, with a maximum limit",
+        "Yes, only for some taxa/groups of taxa, with no limit",
+        "Yes, only for some taxa/groups of taxa, with a maximum limit",
+        "No"
+      ]
+    },
+    {
+      "key": "sex_collected",
+      "step": "sampling",
+      "label": "Sex collected",
+      "type": "radio",
+      "required": false,
+      "db_column": "sex_collected",
+      "options": [
+        "Yes, for all taxa/groups of taxa where externally possible",
+        "Yes, for some taxa/groups of taxa where externally possible",
+        "No"
+      ]
+    },
+    {
+      "key": "additional_characteristics",
+      "step": "sampling",
+      "label": "Additional characteristics collected",
+      "type": "textarea",
+      "required": false,
+      "db_column": "additional_characteristics"
+    },
+    {
+      "key": "technical_challenges",
+      "step": "sampling",
+      "label": "Technical challenges",
+      "type": "textarea",
+      "required": false,
+      "db_column": "technical_challenges"
+    },
+    {
+      "key": "primary_reviewer",
+      "step": "sampling",
+      "label": "Primary reviewer",
+      "type": "radio",
+      "required": false,
+      "db_column": "primary_reviewer",
+      "options": [
+        "Science agency",
+        "Compliance agency",
+        "Both Science and compliance agencies",
+        "Third party - compliance",
+        "Third party - science",
+        "Third party - both"
+      ]
+    },
+
+    {
+      "key": "data_uses",
+      "step": "data",
+      "label": "Current data uses",
+      "type": "textarea",
+      "required": true,
+      "db_column": "data_uses"
+    },
+    {
+      "key": "used_in_stock_assessment",
+      "step": "data",
+      "label": "Used in stock assessments?",
+      "type": "tri-toggle",
+      "required": false,
+      "db_column": "used_in_stock_assessment"
+    },
+    {
+      "key": "data_owner",
+      "step": "data",
+      "label": "Data owner",
+      "type": "checkbox",
+      "required": false,
+      "db_column": "data_owner",
+      "options": ["Agency", "Industry", "3rd party", "Other"]
+    },
+    {
+      "key": "data_sharing_agreements",
+      "step": "data",
+      "label": "Data sharing agreements in place?",
+      "type": "tri-toggle",
+      "required": false,
+      "db_column": "data_sharing_agreements"
+    },
+    {
+      "key": "data_storage_location",
+      "step": "data",
+      "label": "Data storage location",
+      "type": "checkbox",
+      "required": false,
+      "db_column": "data_storage_location",
+      "options": [
+        "Project/programme specific",
+        "EM specific",
+        "National integrated",
+        "Regional integrated",
+        "Physical storage",
+        "Cloud-based storage"
+      ]
+    },
+    {
+      "key": "data_retention_limit",
+      "step": "data",
+      "label": "Data retention limit",
+      "type": "textarea",
+      "required": false,
+      "db_column": "data_retention_limit"
+    },
+    {
+      "key": "additional_notes",
+      "step": "data",
+      "label": "Additional notes",
+      "type": "textarea",
+      "required": false,
+      "db_column": "additional_notes",
+      "_comment": "Also receives merged notes from the EM programme and sampling steps."
+    },
+
+    {
+      "key": "ai_status",
+      "step": "ai",
+      "label": "AI / ML in use or development?",
+      "type": "radio",
+      "required": false,
+      "db_column": "ai_in_development",
+      "_comment": "Transforms: 'development' or 'operational' → ai_in_development=true; 'no' → false",
+      "options": [
+        { "value": "development",  "label": "In development" },
+        { "value": "operational",  "label": "Operational" },
+        { "value": "no",           "label": "No" }
+      ]
+    },
+    {
+      "key": "ai_video_retained",
+      "step": "ai",
+      "label": "Video retained for AI training?",
+      "type": "tri-toggle",
+      "required": false,
+      "db_column": "ai_video_retained",
+      "show_if": { "ai_status": "no" }
+    },
+    {
+      "key": "ai_applications",
+      "step": "ai",
+      "label": "AI applications",
+      "type": "textarea",
+      "required": false,
+      "db_column": "ai_applications",
+      "show_if": { "ai_status": ["development", "operational"] }
+    },
+    {
+      "key": "ai_image_subjects",
+      "step": "ai",
+      "label": "AI image subjects",
+      "type": "text",
+      "required": false,
+      "db_column": "ai_image_subjects",
+      "show_if": { "ai_status": ["development", "operational"] }
+    },
+    {
+      "key": "ai_assets_available",
+      "step": "ai",
+      "label": "AI assets available to others?",
+      "type": "radio",
+      "required": false,
+      "db_column": "ai_assets_available",
+      "show_if": { "ai_status": ["development", "operational"] },
+      "options": [
+        "Yes - upon request",
+        "Yes - publicly available",
+        "No"
+      ]
+    },
+    {
+      "key": "ai_review_stage",
+      "step": "ai",
+      "label": "AI review stage",
+      "type": "checkbox",
+      "required": false,
+      "db_column": "ai_review_stage",
+      "show_if": { "ai_status": ["development", "operational"] },
+      "options": [
+        "Processing of sensor data",
+        "Processing of video data - catch review",
+        "Processing of video data - quality assurance",
+        "Processing of video data - gear review",
+        "Annotation of images",
+        "GDPR-related issues",
+        "Other"
+      ]
+    },
+    {
+      "key": "ai_developer",
+      "step": "ai",
+      "label": "AI developer",
+      "type": "text",
+      "required": false,
+      "db_column": "ai_developer",
+      "show_if": { "ai_status": ["development", "operational"] }
+    },
+    {
+      "key": "ai_training_data_size",
+      "step": "ai",
+      "label": "AI training dataset size (images/frames)",
+      "type": "radio",
+      "required": false,
+      "db_column": "ai_training_data_size",
+      "show_if": { "ai_status": ["development", "operational"] },
+      "options": ["<500", "500–1,000", "1,000–5,000", "5,000–10,000", ">10,000"]
+    }
+  ]
+}
