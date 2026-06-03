@@ -88,7 +88,7 @@ function Cell({ col, value }) {
   }
 }
 
-export default function TableView({ filters, onSelectProgram }) {
+export default function TableView({ filters, onSelectProgram, filtersOpen, onToggleFilters }) {
   const [rows, setRows]       = useState([])
   const [loading, setLoading] = useState(false)
   const [search, setSearch]   = useState('')
@@ -133,6 +133,14 @@ export default function TableView({ filters, onSelectProgram }) {
 
       {/* Toolbar */}
       <div className="flex-shrink-0 px-4 py-2.5 border-b border-[#1e3a5f] flex items-center gap-3">
+        {onToggleFilters && (
+          <button
+            onClick={onToggleFilters}
+            className="flex-shrink-0 bg-[#0d1f3c] border border-[#1e3a5f] rounded px-2 py-1 text-xs text-slate-300 hover:text-white hover:border-cyan-500 transition-colors"
+          >
+            {filtersOpen ? '◀ Filters' : '▶ Filters'}
+          </button>
+        )}
         <input
           type="search"
           value={search}

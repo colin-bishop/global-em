@@ -137,16 +137,13 @@ export default function App() {
           </div>
 
           {/* Table */}
-          <div className="flex-1 relative min-w-0 overflow-hidden flex flex-col">
-            <button
-              onClick={() => setFiltersOpen(f => !f)}
-              className="absolute top-3 left-3 z-10 bg-[#0d1f3c] border border-[#1e3a5f] rounded px-2 py-1 text-xs text-slate-300 hover:text-white hover:border-cyan-500 transition-colors"
-            >
-              {filtersOpen ? '◀ Filters' : '▶ Filters'}
-            </button>
-            <div className="flex-1 overflow-hidden pt-0">
-              <TableView filters={filters} onSelectProgram={setSelectedProgram} />
-            </div>
+          <div className="flex-1 min-w-0 overflow-hidden flex flex-col">
+            <TableView
+              filters={filters}
+              onSelectProgram={setSelectedProgram}
+              filtersOpen={filtersOpen}
+              onToggleFilters={() => setFiltersOpen(f => !f)}
+            />
           </div>
 
           {/* Detail panel */}

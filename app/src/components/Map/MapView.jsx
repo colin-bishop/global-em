@@ -230,7 +230,9 @@ export default function MapView({ filters, onSelectProgram }) {
       countryDataRef.current = byCountry
 
       const countryCount = Object.keys(byCountry).length
-      setStatus(`${total} programme${total !== 1 ? 's' : ''} across ${countryCount} countr${countryCount !== 1 ? 'ies' : 'y'}`)
+      const totalVessels = data.reduce((sum, p) => sum + parseVessels(p), 0)
+      const vesselLabel  = totalVessels > 0 ? ` · ~${vesselRangeLabel(totalVessels) ?? totalVessels.toLocaleString()} EM vessels` : ''
+      setStatus(`${total} programme${total !== 1 ? 's' : ''} across ${countryCount} countr${countryCount !== 1 ? 'ies' : 'y'}${vesselLabel}`)
 
       const maxVessels = Math.max(...Object.values(byCountry).map(d => d.vessels), 1)
       const colorExpr = buildColorExpression(byCountry, maxVessels)
