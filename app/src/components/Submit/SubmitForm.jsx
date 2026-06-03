@@ -276,6 +276,38 @@ function MultiCheckbox({ label, options, value = [], onChange, required, hint })
   )
 }
 
+function ContactsField({ value = [], onChange }) {
+  const add = () => onChange([...value, { name: '', email: '', phone: '', organization: '' }])
+  const remove = i => onChange(value.filter((_, idx) => idx !== i))
+  const update = (i, field, val) => onChange(value.map((c, idx) => idx === i ? { ...c, [field]: val } : c))
+  return (
+    <div>
+      <Label>Programme contacts</Label>
+      <div className="space-y-3 mt-1">
+        {value.map((contact, i) => (
+          <div key={i} className="p-3 rounded border border-[#1e3a5f] bg-[#0a1628] space-y-2">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs font-semibold text-slate-400">Contact {i + 1}</span>
+              <button type="button" onClick={() => remove(i)}
+                className="text-xs text-slate-500 hover:text-red-400 transition-colors">
+                Remove
+              </button>
+            </div>
+            <Input label="Name" value={contact.name} onChange={v => update(i, 'name', v)} placeholder="First Last" />
+            <Input label="Email" type="email" value={contact.email || ''} onChange={v => update(i, 'email', v)} placeholder="name@organisation.org" />
+            <Input label="Phone" value={contact.phone || ''} onChange={v => update(i, 'phone', v)} placeholder="+1 555 0123 (optional)" />
+            <Input label="Organization" value={contact.organization || ''} onChange={v => update(i, 'organization', v)} placeholder="If different from programme organisation" />
+          </div>
+        ))}
+        <button type="button" onClick={add}
+          className="w-full text-sm text-cyan-400 hover:text-cyan-300 border border-dashed border-[#1e3a5f] hover:border-cyan-700 rounded px-4 py-2 transition-colors">
+          + Add contact
+        </button>
+      </div>
+    </div>
+  )
+}
+
 function TriToggle({ label, value, onChange, hint }) {
   return (
     <div>
@@ -1293,8 +1325,7 @@ const EMPTY = {
 
   // Contact metadata
   organizations: [],
-  primary_contact: '',
-  primary_contact_email: '',
+  contacts: [],
   web_links: '',
 }
 
@@ -1384,8 +1415,7 @@ function formFromProgram(p) {
     end_date:          p.end_date || '',
     is_active:         p.is_active ?? false,
     organizations:     split(p.organizations),
-    primary_contact:       p.primary_contact || '',
-    primary_contact_email: p.primary_contact_email || '',
+    contacts:          Array.isArray(p.contacts) ? p.contacts : [],
     web_links:         p.web_links || '',
 
     target_species:    toSpecies(p.target_species),
@@ -1604,8 +1634,7 @@ export default function SubmitForm() {
       is_active:         form.is_active,
       reference_year:    new Date().getFullYear(),
       organizations:     form.organizations.length ? form.organizations.join('; ') : null,
-      primary_contact:         form.primary_contact.trim() || null,
-      primary_contact_email:   form.primary_contact_email.trim() || null,
+      contacts:          form.contacts.filter(c => c.name?.trim()),
       web_links:         form.web_links.trim() || null,
 
       target_species:    form.target_species.length ? form.target_species.map(s => s.a).join('; ') : null,
@@ -1800,8 +1829,7 @@ export default function SubmitForm() {
       <Divider label="Contact & links" />
       <OrgSelect label="Organisations involved" value={form.organizations} onChange={set('organizations')}
         hint="Lead agency, data provider, etc. Select existing or type to add new." />
-      <Input label="Primary contact name" value={form.primary_contact} onChange={set('primary_contact')} placeholder="First Last" />
-      <Input label="Primary contact email" value={form.primary_contact_email} onChange={set('primary_contact_email')} type="email" placeholder="name@organisation.org" />
+      <ContactsField value={form.contacts} onChange={set('contacts')} />
       <Input label="Web links / publications" value={form.web_links} onChange={set('web_links')} placeholder="https://…" />
 
       {mode !== 'edit' && form.programme_name.length >= 4 && (

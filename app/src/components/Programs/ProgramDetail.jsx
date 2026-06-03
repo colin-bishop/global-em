@@ -119,8 +119,21 @@ export default function ProgramDetail({ program: p, onClose }) {
           <Field label="End date"       value={p.end_date} />
           <Field label="Reference year" value={p.reference_year} />
           <Field label="Organizations"  value={p.organizations} />
-          <Field label="Contact"        value={p.primary_contact} />
-          <Field label="Contact email"  value={p.primary_contact_email} />
+          {Array.isArray(p.contacts) && p.contacts.length > 0 ? (
+            p.contacts.map((c, i) => (
+              <div key={i} className="grid gap-x-3 text-xs" style={{ gridTemplateColumns: '130px 1fr' }}>
+                <dt className="text-slate-500 pt-0.5">{i === 0 ? 'Contact' : `Contact ${i + 1}`}</dt>
+                <dd className="text-slate-200 leading-snug">
+                  {c.name}
+                  {c.organization && <span className="text-slate-400"> · {c.organization}</span>}
+                  {c.email && <a href={`mailto:${c.email}`} className="block text-cyan-400 hover:text-cyan-300">{c.email}</a>}
+                  {c.phone && <span className="block text-slate-400">{c.phone}</span>}
+                </dd>
+              </div>
+            ))
+          ) : (
+            <Field label="Contact" value={p.primary_contact} />
+          )}
           {p.web_links && (
             <div className="grid gap-x-3 text-xs" style={{ gridTemplateColumns: '130px 1fr' }}>
               <dt className="text-slate-500 pt-0.5">Web links</dt>

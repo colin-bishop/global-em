@@ -10,7 +10,6 @@
     "is_active": null,
     "end_date": null,
     "organizations": "NOAA Fisheries",
-    "primary_contact": null,
     "web_links": null,
     "reference_year": null,
     "target_species": "Pacific whiting; flatfish; rockfish; sablefish",
@@ -88,7 +87,8 @@
     "ai_review_stage": null,
     "ai_developer": null,
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": []
   },
   {
     "id": "e7a90554-71b2-75b5-8454-229e9911c9ab",
@@ -101,7 +101,6 @@
     "is_active": true,
     "end_date": "2026-12-31",
     "organizations": "Industry; University; research center; Government",
-    "primary_contact": null,
     "web_links": null,
     "reference_year": null,
     "target_species": "Sole; Plaice; Whiting; Squid; Herring",
@@ -177,7 +176,8 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": null,
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": []
   },
   {
     "id": "a26b6b57-b829-8086-d9e8-44a0aabe7337",
@@ -190,7 +190,6 @@
     "is_active": null,
     "end_date": null,
     "organizations": "industry, scientific institute...",
-    "primary_contact": null,
     "web_links": null,
     "reference_year": null,
     "target_species": "Tuna species",
@@ -265,7 +264,8 @@
     "ai_review_stage": null,
     "ai_developer": null,
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": []
   },
   {
     "id": "729114c6-b9f0-242c-d537-eef0b9c186a7",
@@ -278,7 +278,6 @@
     "is_active": null,
     "end_date": null,
     "organizations": "DTU Aqua",
-    "primary_contact": null,
     "web_links": null,
     "reference_year": null,
     "target_species": "round- and flatfish",
@@ -353,7 +352,8 @@
     "ai_review_stage": "Processing of sensor data;Processing of video data - catch review;GDPR-related issues",
     "ai_developer": "Science Institute(s); Anchorlab",
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": []
   },
   {
     "id": "577053e5-d4cc-6ff8-cde3-485b883ebc03",
@@ -366,7 +366,6 @@
     "is_active": false,
     "end_date": "2023-08-01",
     "organizations": "The Danish Agriculture and Fisheries ; DTU Aqua (National Institute of Aquatic Resources)",
-    "primary_contact": null,
     "web_links": null,
     "reference_year": null,
     "target_species": "Sandeel",
@@ -441,7 +440,8 @@
     "ai_review_stage": null,
     "ai_developer": null,
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": []
   },
   {
     "id": "8dbf1a11-8f4f-40b8-415a-ba9348c7bf51",
@@ -454,7 +454,6 @@
     "is_active": null,
     "end_date": null,
     "organizations": "The Danish Agriculture and Fisheries Agency; DPPO (Danish Pelagic PO);",
-    "primary_contact": null,
     "web_links": null,
     "reference_year": null,
     "target_species": "Sandeel",
@@ -529,7 +528,8 @@
     "ai_review_stage": null,
     "ai_developer": "Integrated Monitoring",
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": []
   },
   {
     "id": "ae51aa91-36b6-3967-3efb-3cba7757f948",
@@ -542,7 +542,6 @@
     "is_active": null,
     "end_date": null,
     "organizations": "Marine Beacon consortium partners - task WP5.2.1",
-    "primary_contact": null,
     "web_links": null,
     "reference_year": null,
     "target_species": "common sole (Solea solea); European plaice (Pleuronectes platessa)",
@@ -617,7 +616,8 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "Sam Vanhoorne",
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": []
   },
   {
     "id": "13c36a81-06d2-1f29-c71e-6d925f12cd1e",
@@ -630,7 +630,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "Centre for Environment, Fisheries and Aquaculture Science (Cefas)",
-    "primary_contact": "Rebecca Lamb; rebecca.lamb@cefas.gov.uk",
     "web_links": null,
     "reference_year": null,
     "target_species": "Mixed demersal species",
@@ -705,7 +704,13 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "University of East Anglia",
     "ai_training_data_size": "5,000-10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Rebecca Lamb",
+        "email": "rebecca.lamb@cefas.gov.uk"
+      }
+    ]
   },
   {
     "id": "efd53f90-a4a3-8d53-bc6f-aca4e4a1475f",
@@ -718,7 +723,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "Marine Directorate of Scottish Government",
-    "primary_contact": "steven.buchan@gov.scot",
     "web_links": "https://www.legislation.gov.uk/ssi/2024/165/regulation/1/made; https://www.gov.scot/publications/remote-electronic-monitoring-scallop-technical-specifications/; https://www.gov.scot/publications/remote-electronic-scallop-guidance/",
     "reference_year": null,
     "target_species": "Pecten maximus; Aequipecten opercularis",
@@ -793,7 +797,13 @@
     "ai_review_stage": "Processing of video data - gear review",
     "ai_developer": "Anchorlab",
     "ai_training_data_size": "500-1,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "steven.buchan",
+        "email": "steven.buchan@gov.scot"
+      }
+    ]
   },
   {
     "id": "336f7290-0178-b402-baaf-13d5351f95a2",
@@ -806,7 +816,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "CFEMM - manages; organizations involved - NOAA NMFS Fisheries; Gulf of America Reef Fish Shareholders' Alliance; SouthEast Data, Assessment, and Review (SEDAR); Gulf Council; South Atlantic Council Stock Assessment Advisory committee; independent vessel owners, captains, and crew; New England Marine Monitoring",
-    "primary_contact": "Carole Neidig; cneidig@mote.org",
     "web_links": "mote.org/CFEMM",
     "reference_year": null,
     "target_species": "reef fish - snappers, groupers, tilefish",
@@ -882,7 +891,13 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "CVision AI",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Carole Neidig",
+        "email": "cneidig@mote.org"
+      }
+    ]
   },
   {
     "id": "3495b397-c15e-edc9-3855-57b96ea1714c",
@@ -895,7 +910,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "Danish Agricultural and Fisheries Agency; Danish Fishers PO",
-    "primary_contact": "Kristian Schreiber Plet-Hansen; krscph@lfst.dk",
     "web_links": null,
     "reference_year": null,
     "target_species": "Demersal trawlers targetting Nephrops",
@@ -970,7 +984,13 @@
     "ai_review_stage": "Processing of sensor data;Annotation of images",
     "ai_developer": "Anchor Lab and Danish Agricultural and Fisheries Agency",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Kristian Schreiber Plet-Hansen",
+        "email": "krscph@lfst.dk"
+      }
+    ]
   },
   {
     "id": "3a498ef6-2fe2-0184-b8d7-8d397ef517bb",
@@ -983,7 +1003,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "DTU Aqua",
-    "primary_contact": "ggle@aqua.dtu.dk",
     "web_links": "https://www.dcf-denmark.dk/",
     "reference_year": null,
     "target_species": "round fish; flat fish; crustaceans",
@@ -1060,7 +1079,13 @@
     "ai_review_stage": "Processing of sensor data;Processing of video data - catch review",
     "ai_developer": "DTU; ILVO",
     "ai_training_data_size": "1,000-5,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "ggle",
+        "email": "ggle@aqua.dtu.dk"
+      }
+    ]
   },
   {
     "id": "c3d023a1-cc9b-decf-da8b-e626cdd24eec",
@@ -1073,7 +1098,6 @@
     "is_active": false,
     "end_date": "2024-12-31",
     "organizations": "Danish Agricultural and Fisheries Agency",
-    "primary_contact": "Kristian Schreiber Plet-Hansen; krscph@lfst.dk",
     "web_links": "https://lfst.dk/erhvervsfiskeri/kontrol/monitering-og-overvaagning/kameradokumenteret-fiskeri/evalueringsrapporter",
     "reference_year": null,
     "target_species": "Nephrops",
@@ -1148,7 +1172,13 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "Danish Agricultural and Fisheries Agency",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Kristian Schreiber Plet-Hansen",
+        "email": "krscph@lfst.dk"
+      }
+    ]
   },
   {
     "id": "3464eddf-4afa-e05d-7c2f-35acc4736230",
@@ -1161,7 +1191,6 @@
     "is_active": false,
     "end_date": "2023-12-31",
     "organizations": "Danish Fisheries Agency; DTU Aqua  National Institute of Aquatic Resources",
-    "primary_contact": "krscph@lfst.dk",
     "web_links": "https://lfst.dk/erhvervsfiskeri/kontrol/monitering-og-overvaagning/kameradokumenteret-fiskeri/evalueringsrapporter; https://lfst.dk/erhvervsfiskeri/tilladelser/forsoegsfiskeri/godkendte-projekter-og-tilladelser",
     "reference_year": null,
     "target_species": "Sandeel",
@@ -1237,7 +1266,13 @@
     "ai_review_stage": null,
     "ai_developer": "None",
     "ai_training_data_size": "500-1,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "krscph",
+        "email": "krscph@lfst.dk"
+      }
+    ]
   },
   {
     "id": "bbe34060-b60b-6d57-f951-bdf80a76f839",
@@ -1250,7 +1285,6 @@
     "is_active": false,
     "end_date": "2023-03-31",
     "organizations": "Danish Fisheries Agency; Foreningen for Skånsomt Kystfiskeri Producentorganisation (FSK-PO)",
-    "primary_contact": "krscph@lfst.dk",
     "web_links": "https://lfst.dk/erhvervsfiskeri/kontrol/monitering-og-overvaagning/kameradokumenteret-fiskeri/evalueringsrapporter; https://lfst.dk/erhvervsfiskeri/tilladelser/forsoegsfiskeri/godkendte-projekter-og-tilladelser",
     "reference_year": null,
     "target_species": "Cod",
@@ -1325,7 +1359,13 @@
     "ai_review_stage": null,
     "ai_developer": "NA",
     "ai_training_data_size": "<500",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "krscph",
+        "email": "krscph@lfst.dk"
+      }
+    ]
   },
   {
     "id": "0a0d2a7e-30f1-682a-70d1-d310d37a99b8",
@@ -1338,7 +1378,6 @@
     "is_active": false,
     "end_date": "2023-10-31",
     "organizations": "Danish Agricultural and Fisheries Agency; DTU Aqua – National Institute of Aquatic Resources",
-    "primary_contact": "krscph@lfst.dk",
     "web_links": "https://lfst.dk/Media/638810855985479282/Electronic%20monitoring%20by%20the%20Danish%20fisheries%20control,%202021-2024.pdf; https://lfst.dk/Media/638556934087399726/BILAG_5_2.pdf;",
     "reference_year": null,
     "target_species": "Plaice",
@@ -1413,7 +1452,13 @@
     "ai_review_stage": null,
     "ai_developer": null,
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "krscph",
+        "email": "krscph@lfst.dk"
+      }
+    ]
   },
   {
     "id": "79026441-cc50-d053-994c-b87b76125a6d",
@@ -1426,7 +1471,6 @@
     "is_active": false,
     "end_date": "2025-07-31",
     "organizations": "Danish Agricultural and Fisheries Agency; Danish Fishers PO; DTU Aqua – National Institute of Aquatic Resources",
-    "primary_contact": "krscph@lfst.dk",
     "web_links": "https://lfst.dk/Media/638810855985479282/Electronic%20monitoring%20by%20the%20Danish%20fisheries%20control,%202021-2024.pdf; https://lfst.dk/Media/638700335829178495/Bilag%205_afrapportering_Fj%C3%A6sing%202024.pdf",
     "reference_year": null,
     "target_species": "Greater weever",
@@ -1501,7 +1545,13 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "Danish Agricultural and Fisheries Agency",
     "ai_training_data_size": "5,000-10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "krscph",
+        "email": "krscph@lfst.dk"
+      }
+    ]
   },
   {
     "id": "2170cc8d-1a0f-55ed-f16c-7fe726cae123",
@@ -1514,7 +1564,6 @@
     "is_active": false,
     "end_date": "2024-10-31",
     "organizations": "Danish Agricultural and Fisheries Agency; DTU Aqua – National Institute of Aquatic Resources; Danish Fishers PO",
-    "primary_contact": "krscph@lfst.dk",
     "web_links": "https://lfst.dk/Media/638810855985479282/Electronic%20monitoring%20by%20the%20Danish%20fisheries%20control,%202021-2024.pdf; https://lfst.dk/erhvervsfiskeri/tilladelser/forsoegsfiskeri/godkendte-projekter-og-tilladelser",
     "reference_year": null,
     "target_species": "Plaice; turbot; sole; flounder",
@@ -1589,7 +1638,13 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "Danish Agricultural and Fisheries Agency",
     "ai_training_data_size": "<500",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "krscph",
+        "email": "krscph@lfst.dk"
+      }
+    ]
   },
   {
     "id": "7b14a448-ba5f-2890-85c7-ea26944f73a8",
@@ -1602,7 +1657,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "Danish Pelagic Producers Organisation; DTU Aqua; Aalborg University; Danish Agricultural and Fisheries Agency",
-    "primary_contact": "Mathias Søgaard; ms@pelagisk.dk",
     "web_links": "https://www.dppo.dk/fuldt-dokumenteret-fiskeri/",
     "reference_year": null,
     "target_species": "Herring; Mackerel; Sprat; Sandeel; Blue Whiting; Norway Pout; Horse Mackerel",
@@ -1677,7 +1731,13 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "Integrated Monitoring; Aalborg University, DTU Aqua",
     "ai_training_data_size": "1,000-5,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Mathias Søgaard",
+        "email": "ms@pelagisk.dk"
+      }
+    ]
   },
   {
     "id": "56fced74-e792-442f-7670-d2a0d52e7d33",
@@ -1690,7 +1750,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "HLA",
-    "primary_contact": "Jimmy Freese; jimmyfreese@ai.fish",
     "web_links": "https://www.ai.fish/projects",
     "reference_year": null,
     "target_species": "Bigeye; yellowfin; mahimahi; opah; ono; skipjack; all protected species",
@@ -1765,7 +1824,13 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "Ai.Fish",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Jimmy Freese",
+        "email": "jimmyfreese@ai.fish"
+      }
+    ]
   },
   {
     "id": "d9a53c14-ca30-543f-80f0-ae6b75f33ab6",
@@ -1778,7 +1843,6 @@
     "is_active": false,
     "end_date": "2023-04-01",
     "organizations": "EEA Grants; OLSPS Int; OLSPS Marine; Universidade do Algarve; IPMA; Imenco SA; Crustaceo fishing company.",
-    "primary_contact": "amos@olsps.com; claudia@olsps.com; sgramos@ualg.pt",
     "web_links": "www.olsps.com; https://olsps.com/emrep",
     "reference_year": null,
     "target_species": "Crustaceans",
@@ -1854,7 +1918,21 @@
     "ai_review_stage": null,
     "ai_developer": "OLSPS",
     "ai_training_data_size": "<500",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "amos",
+        "email": "amos@olsps.com"
+      },
+      {
+        "name": "claudia",
+        "email": "claudia@olsps.com"
+      },
+      {
+        "name": "sgramos",
+        "email": "sgramos@ualg.pt"
+      }
+    ]
   },
   {
     "id": "9ea45be5-ce5f-28d1-e893-d8f5cfd0bda7",
@@ -1867,7 +1945,6 @@
     "is_active": false,
     "end_date": "2020-12-31",
     "organizations": "Ai.Fish LLC; National Fish and Wildlife Foundation (NFWF); Pacific Islands Fisheries Science Center (PIFSC); Vessel Management Associates; Google LLC; Amazon Web Services; Microsoft Azure; Hawaii Technology Development Corporation; Various volunteer contributors; EM service providers such as Teem.Fish, SnapIT, Archipelago.",
-    "primary_contact": "Justin Kay, jimmy@ai.fish",
     "web_links": null,
     "reference_year": null,
     "target_species": "Albacore tuna; Yellowfin tuna; Skipjack tuna; Swordfish",
@@ -1942,7 +2019,13 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": null,
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Justin Kay",
+        "email": "jimmy@ai.fish"
+      }
+    ]
   },
   {
     "id": "ca1b398c-9bb7-573c-c4ab-fc877a9ff85b",
@@ -1955,7 +2038,6 @@
     "is_active": false,
     "end_date": "2023-07-17",
     "organizations": "Ai.Fish; Environmental Defense Fund (EDF)​",
-    "primary_contact": "James Freese; jimmy@ai.fish",
     "web_links": null,
     "reference_year": null,
     "target_species": "local nearshore fisheries",
@@ -2029,7 +2111,13 @@
     "ai_review_stage": "Processing of video data - catch review;Processing of video data - quality assurance",
     "ai_developer": "Ai.Fish",
     "ai_training_data_size": "<500",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "James Freese",
+        "email": "jimmy@ai.fish"
+      }
+    ]
   },
   {
     "id": "3950980a-6b8f-0f2c-e616-07ff131713a1",
@@ -2042,7 +2130,6 @@
     "is_active": false,
     "end_date": "2023-03-01",
     "organizations": "Ai.Fish LLC; Archipelago Marine Research; Alaska Fixed Gear EM Program; National Fish and Wildlife Foundation (NFWF); Microsoft Azure; Various commercial fishery stakeholders",
-    "primary_contact": "James Freese; jimmy@ai.fish",
     "web_links": null,
     "reference_year": null,
     "target_species": "Alaska groundfish species; species handled by fixed gear fisheries",
@@ -2118,7 +2205,13 @@
     "ai_review_stage": "Processing of video data - catch review;Processing of video data - quality assurance",
     "ai_developer": "AI Developer: Ai.Fish LLC",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "James Freese",
+        "email": "jimmy@ai.fish"
+      }
+    ]
   },
   {
     "id": "6fb7c84c-7957-2ccb-f699-21ff4d5ec751",
@@ -2131,7 +2224,6 @@
     "is_active": false,
     "end_date": "2023-01-01",
     "organizations": "Ai.Fish LLC (lead developer); NOAA SBIR; Teem.Fish Monitoring; IKE Solutions; Archipelago Marine Research; The Nature Conservancy; Driven Data; multiple fishermen in Hawaii, Alaska, New England",
-    "primary_contact": "James Freese; jimmy@ai.fish",
     "web_links": null,
     "reference_year": null,
     "target_species": "Pelagic fish (tuna types including albacore, bigeye); groundfish species in Alaska; other fish in New England.",
@@ -2206,7 +2298,13 @@
     "ai_review_stage": "Processing of sensor data;Processing of video data - catch review;Processing of video data - quality assurance",
     "ai_developer": "Ai.Fish LLC",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "James Freese",
+        "email": "jimmy@ai.fish"
+      }
+    ]
   },
   {
     "id": "9b6273dc-d8b6-2330-a732-e8d42dc73ca1",
@@ -2219,7 +2317,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "Ai.Fish LLC; NOAA SBIR; Regional Fisheries Management Organizations (RFMOs); Environmental Defense Fund; commercial fishers and EM hardware/software vendors",
-    "primary_contact": "James Freese; jimmy@ai.fish",
     "web_links": null,
     "reference_year": null,
     "target_species": "Tuna species (yellowfin, bigeye, skipjack); associated target and non-target fish in longline fisheries",
@@ -2294,7 +2391,13 @@
     "ai_review_stage": "Processing of sensor data;Processing of video data - catch review;Processing of video data - quality assurance",
     "ai_developer": null,
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "James Freese",
+        "email": "jimmy@ai.fish"
+      }
+    ]
   },
   {
     "id": "0e5af1d2-51f4-33bd-96ff-034e1b1f9f7a",
@@ -2307,7 +2410,6 @@
     "is_active": false,
     "end_date": "2023-01-01",
     "organizations": "Ai.Fish LLC; Fisheries and Oceans Canada",
-    "primary_contact": "James Freese; jimmy@ai.fish",
     "web_links": "https://www.ai.fish/project/pacific-groundfish-trawl",
     "reference_year": null,
     "target_species": "Pacific groundfish (dominant and secondary groups: rockfish, flatfish, cod, sole )",
@@ -2382,7 +2484,13 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "Ai.Fish LLC",
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "James Freese",
+        "email": "jimmy@ai.fish"
+      }
+    ]
   },
   {
     "id": "9fe7a575-2b99-1f5c-647b-c2d44a9a47a7",
@@ -2395,7 +2503,6 @@
     "is_active": false,
     "end_date": "2025-01-01",
     "organizations": "Ai.Fish LLC; Teem Fish Monitoring Inc.; Fisheries and Oceans Canada (DFO); Anchor Lab (hardware provider); ASC Consultant Maritime (installation); participating vessels Manic V and Sextan",
-    "primary_contact": "James Freese, jimmy@ai.fish",
     "web_links": null,
     "reference_year": null,
     "target_species": "Sebastes fasciatus; Sebastes mentella",
@@ -2470,7 +2577,13 @@
     "ai_review_stage": null,
     "ai_developer": "Ai.Fish LLC",
     "ai_training_data_size": "5,000-10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "James Freese",
+        "email": "jimmy@ai.fish"
+      }
+    ]
   },
   {
     "id": "cfbf6254-dc67-a499-d4fc-b1b5ae330b43",
@@ -2483,7 +2596,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "Bolton Food Tri Marine; FlyWire",
-    "primary_contact": "Christa Svensson; csvensson@trimarinegroup.com",
     "web_links": "https://www.seafoodsource.com/news/environment-sustainability/tri-marine-advances-electronic-monitoring-initiative-for-atlantic-tuna-vessels; https://www.undercurrentnews.com/2024/10/24/tri-marine-advances-industry-led-electronic-monitoring-initiative/",
     "reference_year": null,
     "target_species": "Albacore tuna",
@@ -2558,7 +2670,13 @@
     "ai_review_stage": "Processing of sensor data;Processing of video data - catch review;Processing of video data - quality assurance",
     "ai_developer": "FlyWire",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Christa Svensson",
+        "email": "csvensson@trimarinegroup.com"
+      }
+    ]
   },
   {
     "id": "40ad3d1f-42a2-c784-fa5e-b51c86201a19",
@@ -2571,7 +2689,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "Swedish University of Agricultural Science (SLU); Swedish Agency for Marine and Water Management",
-    "primary_contact": "sofia.nyberg@slu.se; anna.s.persson@slu.se",
     "web_links": null,
     "reference_year": null,
     "target_species": "Flatfishes; herring; perch; whitefish; mixed fish",
@@ -2646,7 +2763,17 @@
     "ai_review_stage": null,
     "ai_developer": "SLU (internal development)",
     "ai_training_data_size": "1,000-5,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "sofia.nyberg",
+        "email": "sofia.nyberg@slu.se"
+      },
+      {
+        "name": "anna.s.persson",
+        "email": "anna.s.persson@slu.se"
+      }
+    ]
   },
   {
     "id": "cc5008ef-6500-3fd2-9504-7d0ccb9ae8d5",
@@ -2659,7 +2786,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "Natural Resources Institute Finalnd (Luke)",
-    "primary_contact": "Joni Tiainen; joni.tiainen@luke.fi",
     "web_links": "https://www.luke.fi/fi/luonnonvaratieto/tiedetta-ja-tietoa/kalatalouden-eutiedonkeruuohjelma",
     "reference_year": null,
     "target_species": "Marine mammals; seabirds, endangered fish species",
@@ -2734,7 +2860,13 @@
     "ai_review_stage": null,
     "ai_developer": null,
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Joni Tiainen",
+        "email": "joni.tiainen@luke.fi"
+      }
+    ]
   },
   {
     "id": "32ed2582-5e67-ad91-d87d-eb297352621f",
@@ -2747,7 +2879,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "Office Français de la Biodiversité (OFB); Ifremer; ministries",
-    "primary_contact": "marie-claude.cote-laurin@ofb.gouv.fr",
     "web_links": "https://professionnels.ofb.fr/fr/node/1624",
     "reference_year": null,
     "target_species": "Mixed fisheries targeted with bottom nets (trammels and gillnets) and pelagic paired trawls",
@@ -2824,7 +2955,13 @@
     "ai_review_stage": "Processing of video data - catch review;Processing of video data - quality assurance",
     "ai_developer": "Ifremer & Kitware",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "marie-claude.cote-laurin",
+        "email": "marie-claude.cote-laurin@ofb.gouv.fr"
+      }
+    ]
   },
   {
     "id": "15d21e14-6ae5-cf1c-7e01-a1dbb817dc07",
@@ -2837,7 +2974,6 @@
     "is_active": false,
     "end_date": null,
     "organizations": "Estonian Environmental Board",
-    "primary_contact": null,
     "web_links": null,
     "reference_year": null,
     "target_species": "Baltic herring and sprat",
@@ -2912,7 +3048,8 @@
     "ai_review_stage": null,
     "ai_developer": null,
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": []
   },
   {
     "id": "78f5220b-c881-7c9f-b7d4-54a300148aae",
@@ -2925,7 +3062,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "Department of Fisheries and Marine Research",
-    "primary_contact": null,
     "web_links": null,
     "reference_year": null,
     "target_species": "Large Pelagic species",
@@ -3000,7 +3136,8 @@
     "ai_review_stage": null,
     "ai_developer": null,
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": []
   },
   {
     "id": "477dd42e-0b13-ae81-32cb-7dece2254f5e",
@@ -3013,7 +3150,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "ILVO",
-    "primary_contact": "Sander Delacauw; sander.delacauw@ilvo.vlaanderen.be",
     "web_links": "https://pureportal.ilvo.be/en/projects/toepasbaarheid-van-self-sampling-voor-het-verzamelen-van-biologis/; https://ilvo.vlaanderen.be/en/research-projects/toepasbaarheid-van-artificial-inteligence-en-3d-ai-voor-het-verzamelen-van-biologische-gegevens-binnen-de-belgische-visserijsector-ter-verbetering-van-real-time-management-van-de-bestanden",
     "reference_year": null,
     "target_species": "Flatfish, Demersal Fish",
@@ -3089,7 +3225,13 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "ILVO",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Sander Delacauw",
+        "email": "sander.delacauw@ilvo.vlaanderen.be"
+      }
+    ]
   },
   {
     "id": "843762ab-149c-4661-900d-644ed1e0f03c",
@@ -3102,7 +3244,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "National Marine Fisheries Service",
-    "primary_contact": "joel.kraski@noaa.gov",
     "web_links": "https://www.fisheries.noaa.gov/alaska/resources-fishing/electronic-monitoring-alaska",
     "reference_year": null,
     "target_species": "Alaskan pollock",
@@ -3178,7 +3319,13 @@
     "ai_review_stage": null,
     "ai_developer": "NMFS",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "joel.kraski",
+        "email": "joel.kraski@noaa.gov"
+      }
+    ]
   },
   {
     "id": "4be08e58-5aac-a3c2-a288-8d4a3ee400cc",
@@ -3191,7 +3338,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "CDFW; PSMFC; Archipelago",
-    "primary_contact": null,
     "web_links": "https://www.pcffa.org/news/electronic-monitoring-information",
     "reference_year": null,
     "target_species": "Dungeness Crab",
@@ -3266,7 +3412,8 @@
     "ai_review_stage": "Processing of sensor data",
     "ai_developer": "Archipelago",
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": []
   },
   {
     "id": "7e848b12-3982-b6aa-4c95-f04f2d335b82",
@@ -3279,7 +3426,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "NOAA Fisheries, National Marine Fisheries Service",
-    "primary_contact": "Nichole.Rossi@noaa.gov",
     "web_links": "https://www.fisheries.noaa.gov/new-england-mid-atlantic/commercial-fishing/electronic-monitoring-northeast; https://www.fisheries.noaa.gov/new-england-mid-atlantic/fisheries-observers/fisheries-monitoring-operations-northeast; https://media.fisheries.noaa.gov/2022-05/EM-spring2022-508nefsc.pdf",
     "reference_year": null,
     "target_species": "U.S. Northeast Multispecies Fishery (https://www.fisheries.noaa.gov/species/northeast-multispecies-groundfish)",
@@ -3357,7 +3503,13 @@
     "ai_review_stage": "Processing of sensor data;Processing of video data - catch review",
     "ai_developer": "The agency is using CVision AI.  Most of the service providers are pursuing AI on their own for various reasons as well.",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Nichole.Rossi",
+        "email": "Nichole.Rossi@noaa.gov"
+      }
+    ]
   },
   {
     "id": "ae08bdd7-387f-3e2a-5db2-dfff5e9fb262",
@@ -3370,7 +3522,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "DFO, Canadian Groundfish Research and Conservation Society, Vericatch",
-    "primary_contact": "Lindsay Richardson Lindsay.Richardson-Deranger@dfo-mpo.gc.ca; Theresa Williams theresa@pfmibc.ca; Ross River ross@vericatch.com",
     "web_links": "https://www.pac.dfo-mpo.gc.ca/fm-gp/mplans/ground-fond-ifmp-pgip-sm-eng.html ; https://bctrawlgroundfish.ca/canadian-groundfish-research-and-conservation-society/ ; https://vericatch.com/ ; https://trawler.iqmi.ca/signin ; https://portal.archipelago.ca/login",
     "reference_year": null,
     "target_species": "Groundfish",
@@ -3447,7 +3598,21 @@
     "ai_review_stage": null,
     "ai_developer": "Archipelago",
     "ai_training_data_size": ">10,000",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Lindsay Richardson",
+        "email": "Lindsay.Richardson-Deranger@dfo-mpo.gc.ca"
+      },
+      {
+        "name": "Theresa Williams",
+        "email": "theresa@pfmibc.ca"
+      },
+      {
+        "name": "Ross River",
+        "email": "ross@vericatch.com"
+      }
+    ]
   },
   {
     "id": "c89b0bb9-8484-8127-5505-4588733e86bd",
@@ -3460,7 +3625,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "Fishing Industry ; BMP; SMRU; Arribada Initiative; MMOC; Cefas; ZSL; Mindfully Wired",
-    "primary_contact": "Eilis Crimmins; eilis.crimmins@cefas.gov.uk",
     "web_links": "https://www.cleancatchuk.com/;",
     "reference_year": null,
     "target_species": "Hake; Turbot; Dover sole; Bass; Crawfish; Monk; Mackerel",
@@ -3535,7 +3699,13 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "Cefas; Anchorlab",
     "ai_training_data_size": "<500",
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Eilis Crimmins",
+        "email": "eilis.crimmins@cefas.gov.uk"
+      }
+    ]
   },
   {
     "id": "18922cfc-7196-0a1b-6585-0b84f08ec3ae",
@@ -3548,7 +3718,6 @@
     "is_active": true,
     "end_date": null,
     "organizations": "DFO Pacific; DFO National; BC Commercial Industry Groundfish Society (BCCIGS); industry members - fishers, fish plants, fish buyers, vessel owners; International Pacific Halibut Commission (IPHC)",
-    "primary_contact": "Katie Archer katiea@archipelago.ca; Scott Buchanan scottb@archipelago.ca",
     "web_links": "https://amrscrch.sharepoint.com/:fl:/g/contentstorage/CSP_8a22f379-821e-4a7e-81ce-893456cef8ed/IQCn-zp65i7fRZpSOjROtBNTATjZUCWNp8AJWz0XmuFYpQE?e=O5WvP2&nav=cz0lMkZjb250ZW50c3RvcmFnZSUyRkNTUF84YTIyZjM3OS04MjFlLTRhN2UtODFjZS04OTM0NTZjZWY4ZWQmZD1iJTIxZWZNaWloNkNma3FCem9rMFZzNzQ3ZjZsMHYzME1iZEdzc2VUR1hUakFWTGRrZFJ2SVJmQlRvOGFTeUtCcVdhdCZmPTAxUUlKTDVMRkg3TTVIVlpSTzM1Q1pVVVIyR1JITElFMlQmYz0lMkYmYT1Mb29wQXBwJnA9JTQwZmx1aWR4JTJGbG9vcC1wYWdlLWNvbnRhaW5lcg%3D%3D;  https://portal.archipelago.ca/login.aspx?ReturnUrl=%2ftrip%2ftrip_list.aspx; https://archipelagosupport.freshdesk.com/support/solutions; archipelago's eshop; https://planner.cloud.microsoft/webui/plan/KaRY6nW6FUiC9lgX1-TSuWQAFXBi/view/grid?tid=8ea2eb24-efec-405c-8ab1-b3676d1853e8; https://www-ops2.pac.dfo-mpo.gc.ca/vrnd-rneb/index-eng.cfm?pg=VesselSearchForm;",
     "reference_year": null,
     "target_species": "Halibut; Sablefish; Rockfish; Lingcod; Sablefish",
@@ -3627,6 +3796,16 @@
     "ai_review_stage": "Processing of video data - catch review",
     "ai_developer": "Archipelago",
     "ai_training_data_size": null,
-    "status": "approved"
+    "status": "approved",
+    "contacts": [
+      {
+        "name": "Katie Archer",
+        "email": "katiea@archipelago.ca"
+      },
+      {
+        "name": "Scott Buchanan",
+        "email": "scottb@archipelago.ca"
+      }
+    ]
   }
 ]

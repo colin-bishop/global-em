@@ -92,20 +92,13 @@
       "_comment": "Multi-value typeahead seeded from existing DB values; allows free-text additions. Stored as semicolon-delimited string."
     },
     {
-      "key": "primary_contact",
+      "key": "contacts",
       "step": "basics",
-      "label": "Primary contact name",
-      "type": "text",
+      "label": "Programme contacts",
+      "type": "contacts-list",
       "required": false,
-      "db_column": "primary_contact"
-    },
-    {
-      "key": "primary_contact_email",
-      "step": "basics",
-      "label": "Primary contact email",
-      "type": "email",
-      "required": false,
-      "db_column": "primary_contact_email"
+      "db_column": "contacts",
+      "_comment": "Array of contact objects: { name, email, phone, organization }. Replaces flat primary_contact + primary_contact_email fields."
     },
     {
       "key": "web_links",
