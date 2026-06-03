@@ -12,6 +12,8 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # GITHUB_REPO is a public repo name, not a secret — suppress false-positive scan
+  SECRETS_SCAN_OMIT_KEYS = "GITHUB_REPO"
 
 # SPA fallback — all routes serve index.html
 [[redirects]]
