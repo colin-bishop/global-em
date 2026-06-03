@@ -46,9 +46,12 @@ export default function DuplicateCheck({ programmeName, country, gearTypes, star
           .sort((a, b) => b._score - a._score)
           .slice(0, 5)
         setCandidates(scored)
+        // Auto-confirm as new when no duplicates found — no user action needed
+        if (scored.length === 0) onResult('new')
       } catch (err) {
         console.error('[DuplicateCheck]', err)
         setCandidates([])
+        onResult('new')
       }
       setLoading(false)
     }
