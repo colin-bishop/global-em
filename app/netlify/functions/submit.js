@@ -60,10 +60,19 @@ exports.handler = async (event) => {
 
     await ghPost(token, `/repos/${REPO}/git/refs`, { ref: `refs/heads/${branch}`, sha: mainSha })
 
+    // File may already exist on the branch (inherited from main if editing a previously
+    // submitted programme). GitHub requires the current SHA to overwrite an existing file.
+    let existingSha = null
+    try {
+      const existing = await ghGet(token, `/repos/${REPO}/contents/${filePath}?ref=${encodeURIComponent(branch)}`)
+      existingSha = existing.sha
+    } catch { /* file doesn't exist yet — fine for new submissions */ }
+
     await ghPut(token, `/repos/${REPO}/contents/${filePath}`, {
       message: `${isEdit ? 'Update' : 'Add'} submission: ${submission.programme_name || 'unnamed'}`,
       content: Buffer.from(JSON.stringify(submissionData, null, 2)).toString('base64'),
       branch,
+      ...(existingSha ? { sha: existingSha } : {}),
     })
 
     const name    = submission.programme_name || 'Unnamed Programme'
