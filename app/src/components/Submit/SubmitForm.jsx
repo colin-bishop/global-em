@@ -1883,11 +1883,11 @@ export default function SubmitForm() {
       <div className="max-w-xl mx-auto px-6 py-16 text-center">
         <div className="w-14 h-14 rounded-full bg-green-900/40 border border-green-700 flex items-center justify-center mx-auto mb-4 text-2xl">✓</div>
         <h2 className="text-lg font-semibold text-white mb-2">
-          {wasEdit ? 'Programme updated' : 'Submission received'}
+          {wasEdit ? 'Update submitted' : 'Submission received'}
         </h2>
         <p className="text-sm text-slate-400 mb-6">
           {wasEdit
-            ? `${duplicateResult?.name ?? form.programme_name} has been updated and is live on the map.`
+            ? `Your update to ${duplicateResult?.name ?? form.programme_name} has been submitted. Your submission will be reviewed before changes appear on the map.`
             : `${form.programme_name} has been submitted and is pending admin approval before appearing on the map.`}
         </p>
         <button
