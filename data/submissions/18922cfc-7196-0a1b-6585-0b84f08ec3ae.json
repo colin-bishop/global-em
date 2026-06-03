@@ -19,7 +19,7 @@
   ],
   "fleet_size_total": "100–200",
   "fleet_size_em": null,
-  "vessel_size_range": "6-36m; 10–15m; 15–20m; 20–30m",
+  "vessel_size_range": "6-36m; 7–10m; 10–15m; 15–20m; 20–30m",
   "vessel_size_em": null,
   "areas_of_operation": "FAO:67 – Pacific, Northeast; EEZ:CAN",
   "trip_duration": "4–6 days",
@@ -75,7 +75,7 @@
   "used_in_stock_assessment": true,
   "data_owner": "Industry",
   "data_sharing_agreements": "Yes",
-  "data_storage_location": "Project/programme specific; Regional integrated; National integrated",
+  "data_storage_location": "Project/programme specific; National integrated; Regional integrated",
   "data_retention_limit": "raw data held for 14 days following release of quota status report unless held for another reason; images and video clips may be held indefinitely on Archipealgo's Portal and/or other locations",
   "ai_in_development": null,
   "ai_video_retained": false,
@@ -87,5 +87,5 @@
   "ai_training_data_size": null,
   "additional_notes": null,
   "id": "18922cfc-7196-0a1b-6585-0b84f08ec3ae",
-  "submitted_at": "2026-06-03T06:37:59.854Z"
+  "submitted_at": "2026-06-03T07:11:47.719Z"
 }
