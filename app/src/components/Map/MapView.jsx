@@ -31,7 +31,14 @@ function vesselRangeLabel(total) {
 }
 
 function parseVessels(program) {
-  return (program.fleet_size_em != null && program.fleet_size_em > 0) ? program.fleet_size_em : 0
+  if (program.fleet_size_em != null && program.fleet_size_em > 0) return program.fleet_size_em
+  // Fall back to fleet_size_total when fleet_size_em is missing — parse plain numbers only,
+  // ignore range strings like "100–300" since we can't reliably pick a midpoint
+  if (program.fleet_size_total) {
+    const n = parseInt(String(program.fleet_size_total).replace(/,/g, ''), 10)
+    if (!isNaN(n) && n > 0) return n
+  }
+  return 0
 }
 
 function buildCountryData(programs) {
