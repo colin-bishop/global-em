@@ -32,3 +32,10 @@ venv/
 .DS_Store
 Thumbs.db
 .gstack/
+
+# Local Netlify folder
+.netlify
+
+# Playwright test artifacts
+app/test-results/
+app/playwright-report/

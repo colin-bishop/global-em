@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../../lib/supabase'
 
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD
+const API = '/.netlify/functions'
 
 function Field({ label, value }) {
   if (!value && value !== false) return null
@@ -15,8 +14,9 @@ function Field({ label, value }) {
   )
 }
 
-function PendingCard({ program: p, onApprove, onReject, actioning }) {
-  const busy = actioning === p.id
+function PendingCard({ item, onApprove, onReject, actioning }) {
+  const p = item.program
+  const busy = actioning === item.prNumber
   return (
     <div className="p-4 rounded-lg border border-[#1e3a5f] bg-[#0d1f3c] space-y-3">
       <div className="flex items-start justify-between gap-4">
@@ -26,18 +26,27 @@ function PendingCard({ program: p, onApprove, onReject, actioning }) {
             {p.country_iso && <span>{p.country_iso}</span>}
             <span>{p.is_active ? 'Active' : 'Inactive'}</span>
             {p.em_regulation && <span>{p.em_regulation.replace('Under Regulation - ', '').replace('Non-Regulation - ', '')}</span>}
+            {item.isEdit && <span className="text-yellow-400">Update</span>}
           </div>
+          <a
+            href={item.prUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-cyan-500 hover:text-cyan-300 mt-1 inline-block"
+          >
+            PR #{item.prNumber} on GitHub ↗
+          </a>
         </div>
         <div className="flex gap-2 flex-shrink-0">
           <button
-            onClick={() => onApprove(p.id)}
+            onClick={() => onApprove(item)}
             disabled={busy}
             className="bg-green-700 hover:bg-green-600 disabled:opacity-40 text-white text-xs px-3 py-1.5 rounded transition-colors"
           >
             {busy ? '…' : 'Approve'}
           </button>
           <button
-            onClick={() => onReject(p.id)}
+            onClick={() => onReject(item)}
             disabled={busy}
             className="border border-red-800 bg-red-900/30 hover:bg-red-900/60 disabled:opacity-40 text-red-300 text-xs px-3 py-1.5 rounded transition-colors"
           >
@@ -65,50 +74,80 @@ function PendingCard({ program: p, onApprove, onReject, actioning }) {
 }
 
 export default function AdminPanel() {
-  const [authed, setAuthed] = useState(() => sessionStorage.getItem('glem_admin') === '1')
+  const [authed, setAuthed] = useState(false)
   const [password, setPassword] = useState('')
-  const [authError, setAuthError] = useState(false)
+  const [authError, setAuthError] = useState('')
 
   const [pending, setPending] = useState([])
   const [loading, setLoading] = useState(false)
   const [actioning, setActioning] = useState(null)
+  const [actionError, setActionError] = useState('')
 
-  const login = () => {
-    if (!ADMIN_PASSWORD || password === ADMIN_PASSWORD) {
-      sessionStorage.setItem('glem_admin', '1')
+  const fetchPending = async (pw) => {
+    setLoading(true)
+    setActionError('')
+    try {
+      const res = await fetch(`${API}/pending`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw }),
+      })
+      if (res.status === 401) {
+        setAuthError('Incorrect password.')
+        setAuthed(false)
+        return
+      }
+      if (!res.ok) throw new Error(`Server error: ${res.status}`)
+      setPending(await res.json())
       setAuthed(true)
-      setAuthError(false)
-    } else {
-      setAuthError(true)
+    } catch (err) {
+      setActionError(err.message)
+    } finally {
+      setLoading(false)
     }
   }
 
-  const fetchPending = async () => {
-    setLoading(true)
-    const { data, error } = await supabase
-      .from('programs')
-      .select('*')
-      .eq('status', 'pending')
-    if (!error) setPending(data ?? [])
-    setLoading(false)
+  const login = () => {
+    setAuthError('')
+    fetchPending(password)
   }
 
-  useEffect(() => {
-    if (authed) fetchPending()
-  }, [authed])
-
-  const approve = async (id) => {
-    setActioning(id)
-    await supabase.from('programs').update({ status: 'approved' }).eq('id', id)
-    setPending(p => p.filter(r => r.id !== id))
-    setActioning(null)
+  const approve = async (item) => {
+    setActioning(item.prNumber)
+    setActionError('')
+    try {
+      const res = await fetch(`${API}/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password, prNumber: item.prNumber, filePath: item.filePath }),
+      })
+      const body = await res.json()
+      if (!res.ok) throw new Error(body.error || `Server error: ${res.status}`)
+      setPending(p => p.filter(i => i.prNumber !== item.prNumber))
+    } catch (err) {
+      setActionError(`Approve failed: ${err.message}`)
+    } finally {
+      setActioning(null)
+    }
   }
 
-  const reject = async (id) => {
-    setActioning(id)
-    await supabase.from('programs').delete().eq('id', id)
-    setPending(p => p.filter(r => r.id !== id))
-    setActioning(null)
+  const reject = async (item) => {
+    setActioning(item.prNumber)
+    setActionError('')
+    try {
+      const res = await fetch(`${API}/reject`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password, prNumber: item.prNumber }),
+      })
+      const body = await res.json()
+      if (!res.ok) throw new Error(body.error || `Server error: ${res.status}`)
+      setPending(p => p.filter(i => i.prNumber !== item.prNumber))
+    } catch (err) {
+      setActionError(`Reject failed: ${err.message}`)
+    } finally {
+      setActioning(null)
+    }
   }
 
   // ── Password gate ──────────────────────────────────────────────────────────
@@ -121,18 +160,19 @@ export default function AdminPanel() {
           <input
             type="password"
             value={password}
-            onChange={e => { setPassword(e.target.value); setAuthError(false) }}
+            onChange={e => { setPassword(e.target.value); setAuthError('') }}
             onKeyDown={e => e.key === 'Enter' && login()}
             placeholder="Password"
             autoFocus
             className="w-full bg-[#0d1f3c] border border-[#1e3a5f] rounded px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
           />
-          {authError && <p className="text-xs text-red-400">Incorrect password.</p>}
+          {authError && <p className="text-xs text-red-400">{authError}</p>}
           <button
             onClick={login}
-            className="w-full bg-cyan-700 hover:bg-cyan-600 text-white text-sm py-2 rounded transition-colors"
+            disabled={loading}
+            className="w-full bg-cyan-700 hover:bg-cyan-600 disabled:opacity-50 text-white text-sm py-2 rounded transition-colors"
           >
-            Sign in
+            {loading ? 'Signing in…' : 'Sign in'}
           </button>
         </div>
       </div>
@@ -153,19 +193,25 @@ export default function AdminPanel() {
         </div>
         <div className="flex gap-3 items-center">
           <button
-            onClick={fetchPending}
+            onClick={() => fetchPending(password)}
             className="text-xs text-slate-400 hover:text-white transition-colors"
           >
             Refresh
           </button>
           <button
-            onClick={() => { sessionStorage.removeItem('glem_admin'); setAuthed(false) }}
+            onClick={() => { setAuthed(false); setPending([]) }}
             className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
           >
             Sign out
           </button>
         </div>
       </div>
+
+      {actionError && (
+        <div className="mb-4 px-3 py-2 rounded border border-red-800 bg-red-900/20 text-xs text-red-300">
+          {actionError}
+        </div>
+      )}
 
       {loading && <p className="text-sm text-slate-400">Loading…</p>}
 
@@ -174,10 +220,10 @@ export default function AdminPanel() {
       )}
 
       <div className="space-y-4">
-        {pending.map(p => (
+        {pending.map(item => (
           <PendingCard
-            key={p.id}
-            program={p}
+            key={item.prNumber}
+            item={item}
             onApprove={approve}
             onReject={reject}
             actioning={actioning}

@@ -1,7 +1,14 @@
 [build]
-  base    = "app"
-  command = "npm run build"
-  publish = "dist"
+  base      = "app"
+  command   = "npm run build"
+  publish   = "dist"
+  functions = "netlify/functions"
+
+[dev]
+  command     = "npm --prefix app run dev"
+  targetPort  = 5173
+  port        = 8888
+  autoLaunch  = false
 
 [build.environment]
   NODE_VERSION = "20"

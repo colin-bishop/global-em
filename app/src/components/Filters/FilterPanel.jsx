@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabase'
+import { fetchPrograms } from '../../lib/programs'
 
 const EM_REGULATIONS = [
   'Under Regulation - Mandatory',
@@ -84,32 +84,20 @@ export default function FilterPanel({ filters, onFilterChange, onClear }) {
   const [totalCount, setTotalCount] = useState(null)
 
   useEffect(() => {
-    // Distinct country codes
-    supabase.from('programs').select('country_iso').eq('status', 'approved')
-      .then(({ data }) => {
-        const unique = [...new Set((data ?? []).map(r => r.country_iso).filter(Boolean))].sort()
-        setCountries(unique)
-      })
+    fetchPrograms().then(programs => {
+      const approved = programs.filter(p => p.status === 'approved')
 
-    // Distinct gear types (flatten arrays)
-    supabase.from('programs').select('gear_types').eq('status', 'approved')
-      .then(({ data }) => {
-        const all = (data ?? []).flatMap(r => r.gear_types ?? [])
-        const unique = [...new Set(all.map(g => g.trim()).filter(Boolean))].sort()
-        setGearTypes(unique)
-      })
+      const uniqueCountries = [...new Set(approved.map(p => p.country_iso).filter(Boolean))].sort()
+      setCountries(uniqueCountries)
 
-    // Distinct programme types
-    supabase.from('programs').select('programme_type').eq('status', 'approved')
-      .then(({ data }) => {
-        const all = (data ?? []).flatMap(r => r.programme_type ?? [])
-        const unique = [...new Set(all.map(t => t.trim()).filter(Boolean))].sort()
-        setProgrammeTypes(unique)
-      })
+      const uniqueGear = [...new Set(approved.flatMap(p => p.gear_types ?? []).map(g => g.trim()).filter(Boolean))].sort()
+      setGearTypes(uniqueGear)
 
-    // Total count for display
-    supabase.from('programs').select('id', { count: 'exact', head: true }).eq('status', 'approved')
-      .then(({ count }) => setTotalCount(count))
+      const uniqueTypes = [...new Set(approved.flatMap(p => p.programme_type ?? []).map(t => t.trim()).filter(Boolean))].sort()
+      setProgrammeTypes(uniqueTypes)
+
+      setTotalCount(approved.length)
+    }).catch(() => {})
   }, [])
 
   const hasFilters = (

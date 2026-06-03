@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { supabase } from '../../lib/supabase'
+import { fetchPrograms, applyFilters } from '../../lib/programs'
 
 const VESSEL_BUCKETS = [
   { label: '<5',          max: 4    },
@@ -97,24 +97,12 @@ export default function TableView({ filters, onSelectProgram }) {
 
   const fetchData = useCallback(async () => {
     setLoading(true)
-    let q = supabase
-      .from('programs')
-      .select('id, programme_name, country_iso, is_active, em_regulation, programme_type, gear_types, fleet_size_em, review_model, start_date, collects_video, ai_in_development, dcf_programme')
-      .eq('status', 'approved')
-
-    if (filters.isActive !== null)      q = q.eq('is_active', filters.isActive)
-    if (filters.countries?.length)      q = q.in('country_iso', filters.countries)
-    if (filters.emRegulation?.length)   q = q.in('em_regulation', filters.emRegulation)
-    if (filters.fullRem !== null)       q = q.eq('full_rem_coverage', filters.fullRem)
-    if (filters.collectsVideo !== null) q = q.eq('collects_video', filters.collectsVideo)
-    if (filters.aiDevelopment !== null) q = q.eq('ai_in_development', filters.aiDevelopment)
-    if (filters.dcfProgramme !== null)  q = q.eq('dcf_programme', filters.dcfProgramme)
-    if (filters.reviewModel?.length)    q = q.in('review_model', filters.reviewModel)
-    if (filters.gearTypes?.length)      q = q.overlaps('gear_types', filters.gearTypes)
-    if (filters.programmeTypes?.length) q = q.overlaps('programme_type', filters.programmeTypes)
-
-    const { data } = await q
-    setRows(data ?? [])
+    try {
+      const all = await fetchPrograms()
+      setRows(applyFilters(all, filters))
+    } catch (err) {
+      console.error('[TableView] Failed to load programmes:', err)
+    }
     setLoading(false)
   }, [filters])
 
@@ -125,9 +113,8 @@ export default function TableView({ filters, onSelectProgram }) {
     else { setSortKey(key); setSortDir('asc') }
   }
 
-  const handleRowClick = async (row) => {
-    const { data } = await supabase.from('programs').select('*').eq('id', row.id).single()
-    if (data) onSelectProgram(data)
+  const handleRowClick = (row) => {
+    onSelectProgram(row)
   }
 
   const filtered = rows.filter(r =>

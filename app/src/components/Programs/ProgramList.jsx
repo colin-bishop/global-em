@@ -1,5 +1,5 @@
 import React from 'react'
-import { supabase } from '../../lib/supabase'
+import { fetchPrograms } from '../../lib/programs'
 
 const REGULATION_BADGE = {
   'Under Regulation - Mandatory': 'bg-red-900/40 text-red-300 border-red-800',
@@ -8,9 +8,8 @@ const REGULATION_BADGE = {
 }
 
 export default function ProgramList({ programs, onSelect, onClose }) {
-  const handleClick = async (p) => {
-    const { data, error } = await supabase.from('programs').select('*').eq('id', p.id).single()
-    if (!error && data) onSelect(data)
+  const handleClick = (p) => {
+    onSelect(p)
   }
 
   return (

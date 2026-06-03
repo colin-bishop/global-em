@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { supabase } from '../../lib/supabase'
+import { fetchPrograms } from '../../lib/programs'
 
 function score(candidate, name, country, gearTypes, startYear) {
   let s = 0
   const cName = (candidate.programme_name ?? '').toLowerCase()
   const qName = (name ?? '').toLowerCase()
 
-  // Name similarity (simple: shared significant words)
   const words = qName.split(/\W+/).filter(w => w.length > 3)
   const matches = words.filter(w => cName.includes(w))
   if (matches.length > 0) s += Math.round((matches.length / Math.max(words.length, 1)) * 60)
 
-  // Country match
   if (country && candidate.country_iso === country) s += 20
 
-  // Gear overlap
   const cGear = candidate.gear_types ?? []
   const overlap = (gearTypes ?? []).filter(g => cGear.includes(g))
   if (overlap.length > 0) s += 10
 
-  // Year proximity
   if (startYear && candidate.start_date) {
     const cy = new Date(candidate.start_date).getFullYear()
     if (Math.abs(cy - startYear) <= 2) s += 10
@@ -31,7 +27,7 @@ function score(candidate, name, country, gearTypes, startYear) {
 export default function DuplicateCheck({ programmeName, country, gearTypes, startYear, onResult }) {
   const [candidates, setCandidates] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [choice, setChoice] = useState(null) // null | 'new' | {id, name}
+  const [choice, setChoice] = useState(null)
 
   useEffect(() => {
     if (!programmeName || programmeName.length < 4) return
@@ -41,20 +37,19 @@ export default function DuplicateCheck({ programmeName, country, gearTypes, star
     setChoice(null)
 
     const run = async () => {
-      let q = supabase.from('programs').select(
-        'id, programme_name, country_iso, start_date, is_active, em_regulation, gear_types, fleet_size_total'
-      ).eq('status', 'approved')
-
-      if (country) q = q.eq('country_iso', country)
-
-      const { data } = await q
-      const scored = (data ?? [])
-        .map(c => ({ ...c, _score: score(c, programmeName, country, gearTypes, startYear) }))
-        .filter(c => c._score >= 20)
-        .sort((a, b) => b._score - a._score)
-        .slice(0, 5)
-
-      setCandidates(scored)
+      try {
+        const all = await fetchPrograms()
+        const pool = country ? all.filter(p => p.status === 'approved' && p.country_iso === country) : all.filter(p => p.status === 'approved')
+        const scored = pool
+          .map(c => ({ ...c, _score: score(c, programmeName, country, gearTypes, startYear) }))
+          .filter(c => c._score >= 20)
+          .sort((a, b) => b._score - a._score)
+          .slice(0, 5)
+        setCandidates(scored)
+      } catch (err) {
+        console.error('[DuplicateCheck]', err)
+        setCandidates([])
+      }
       setLoading(false)
     }
     run()

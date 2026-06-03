@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react'
 import maplibregl from 'maplibre-gl'
-import { supabase } from '../../lib/supabase'
+import { fetchPrograms, applyFilters } from '../../lib/programs'
 
 const BASEMAP_STYLE = 'https://tiles.openfreemap.org/styles/positron'
 
@@ -31,7 +31,6 @@ function vesselRangeLabel(total) {
 }
 
 function parseVessels(program) {
-  // fleet_size_em stores the midpoint of the selected range (or 0)
   return (program.fleet_size_em != null && program.fleet_size_em > 0) ? program.fleet_size_em : 0
 }
 
@@ -58,8 +57,14 @@ function buildColorExpression(countryData, maxVessels) {
   for (const [iso, { vessels }] of Object.entries(countryData)) {
     pairs.push(iso, vesselColor(vessels, maxVessels))
   }
-  if (pairs.length === 0) return '#e8eaed'
-  return ['match', ['get', 'iso3'], ...pairs, '#e8eaed']
+  if (pairs.length === 0) return 'rgba(0,0,0,0)'
+  return ['match', ['get', 'iso3'], ...pairs, 'rgba(0,0,0,0)']
+}
+
+function buildOutlineExpression(countryData) {
+  const isos = Object.keys(countryData)
+  if (isos.length === 0) return 'rgba(0,0,0,0)'
+  return ['match', ['get', 'iso3'], ...isos.flatMap(iso => [iso, '#4292c6']), 'rgba(0,0,0,0)']
 }
 
 function countryTooltipHTML(programs) {
@@ -124,7 +129,6 @@ export default function MapView({ filters, onSelectProgram }) {
       mapLoadedRef.current = true
       setStatus('Map loaded — fetching programmes…')
 
-      // Insert country layers below the first symbol (label) layer so labels stay on top
       const firstSymbolId = map.getStyle().layers.find(l => l.type === 'symbol')?.id
 
       // ── Country fill layers ────────────────────────────────────────────────
@@ -135,21 +139,21 @@ export default function MapView({ filters, onSelectProgram }) {
         id: 'countries-fill',
         type: 'fill',
         source: 'countries',
-        paint: { 'fill-color': '#e8eaed', 'fill-opacity': 0.9 },
+        paint: { 'fill-color': 'rgba(0,0,0,0)', 'fill-opacity': 0.7 },
       }, firstSymbolId)
 
       map.addLayer({
-        id: 'countries-line',
+        id: 'countries-outline',
         type: 'line',
         source: 'countries',
-        paint: { 'line-color': '#ffffff', 'line-width': 0.5, 'line-opacity': 0.8 },
+        paint: { 'line-color': 'rgba(0,0,0,0)', 'line-width': 1.5, 'line-opacity': 0.9 },
       }, firstSymbolId)
 
       map.addLayer({
         id: 'countries-hover',
         type: 'fill',
         source: 'countries',
-        paint: { 'fill-color': '#2171b5', 'fill-opacity': 0.25 },
+        paint: { 'fill-color': '#2171b5', 'fill-opacity': 0.2 },
         filter: ['==', ['get', 'iso3'], ''],
       }, firstSymbolId)
 
@@ -192,11 +196,8 @@ export default function MapView({ filters, onSelectProgram }) {
         const data = countryDataRef.current[iso]
         if (!data?.programs?.length) return
         if (data.programs.length === 1) {
-          // Single programme — fetch full record and open detail
-          const { data: full, error } = await supabase.from('programs').select('*').eq('id', data.programs[0].id).single()
-          if (!error && full) onSelectProgram(full)
+          onSelectProgram(data.programs[0])
         } else {
-          // Multiple programmes — pass array; App will show a list
           onSelectProgram(data.programs)
         }
       })
@@ -213,42 +214,30 @@ export default function MapView({ filters, onSelectProgram }) {
   const loadPrograms = useCallback(async () => {
     setStatus('Fetching programmes…')
 
-    let q = supabase
-      .from('programs')
-      .select('id, programme_name, country_iso, is_active, em_regulation, gear_types, fleet_size_total, fleet_size_em, programme_type, collects_video, ai_in_development')
-      .eq('status', 'approved')
+    try {
+      const all = await fetchPrograms()
+      const data = applyFilters(all, filters)
 
-    if (filters.isActive !== null)      q = q.eq('is_active', filters.isActive)
-    if (filters.countries?.length)      q = q.in('country_iso', filters.countries)
-    if (filters.emRegulation?.length)   q = q.in('em_regulation', filters.emRegulation)
-    if (filters.fullRem !== null)       q = q.eq('full_rem_coverage', filters.fullRem)
-    if (filters.collectsVideo !== null) q = q.eq('collects_video', filters.collectsVideo)
-    if (filters.aiDevelopment !== null) q = q.eq('ai_in_development', filters.aiDevelopment)
-    if (filters.dcfProgramme !== null)  q = q.eq('dcf_programme', filters.dcfProgramme)
-    if (filters.reviewModel?.length)    q = q.in('review_model', filters.reviewModel)
-    if (filters.gearTypes?.length)      q = q.overlaps('gear_types', filters.gearTypes)
-    if (filters.programmeTypes?.length) q = q.overlaps('programme_type', filters.programmeTypes)
+      const total = data.length
+      const byCountry = buildCountryData(data)
+      countryDataRef.current = byCountry
 
-    const { data, error } = await q
+      const countryCount = Object.keys(byCountry).length
+      setStatus(`${total} programme${total !== 1 ? 's' : ''} across ${countryCount} countr${countryCount !== 1 ? 'ies' : 'y'}`)
 
-    if (error) {
-      console.error('[GlobalEM] Supabase error:', error)
-      setStatus(`Supabase error: ${error.message}`)
-      return
-    }
+      const maxVessels = Math.max(...Object.values(byCountry).map(d => d.vessels), 1)
+      const colorExpr = buildColorExpression(byCountry, maxVessels)
+      const outlineExpr = buildOutlineExpression(byCountry)
 
-    const total = data?.length ?? 0
-    const byCountry = buildCountryData(data ?? [])
-    countryDataRef.current = byCountry
-
-    const countryCount = Object.keys(byCountry).length
-    setStatus(`${total} programme${total !== 1 ? 's' : ''} across ${countryCount} countr${countryCount !== 1 ? 'ies' : 'y'}`)
-
-    const maxVessels = Math.max(...Object.values(byCountry).map(d => d.vessels), 1)
-    const colorExpr = buildColorExpression(byCountry, maxVessels)
-
-    if (mapRef.current?.getLayer('countries-fill')) {
-      mapRef.current.setPaintProperty('countries-fill', 'fill-color', colorExpr)
+      if (mapRef.current?.getLayer('countries-fill')) {
+        mapRef.current.setPaintProperty('countries-fill', 'fill-color', colorExpr)
+      }
+      if (mapRef.current?.getLayer('countries-outline')) {
+        mapRef.current.setPaintProperty('countries-outline', 'line-color', outlineExpr)
+      }
+    } catch (err) {
+      console.error('[GlobalEM] Failed to load programmes:', err)
+      setStatus(`Error loading programmes: ${err.message}`)
     }
   }, [filters])
 

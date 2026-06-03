@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
-import { supabase } from '../../lib/supabase'
+import { fetchPrograms } from '../../lib/programs'
 import DuplicateCheck from './DuplicateCheck'
 
 // ── Option lists (matching WGTIFD survey exactly) ──────────────────────────────
@@ -1255,21 +1255,20 @@ function OrgSelect({ label, value = [], onChange, hint, column = 'organizations'
   const ref = useRef(null)
 
   useEffect(() => {
-    supabase.from('programs').select(column).not(column, 'is', null)
-      .then(({ data }) => {
-        const seen = new Set()
-        const orgs = []
-        for (const row of data ?? []) {
-          for (const raw of (row[column] ?? '').split(/[;,]/)) {
-            const name = raw.trim()
-            if (name && !seen.has(name.toLowerCase())) {
-              seen.add(name.toLowerCase())
-              orgs.push(name)
-            }
+    fetchPrograms().then(programs => {
+      const seen = new Set()
+      const orgs = []
+      for (const row of programs) {
+        for (const raw of (row[column] ?? '').split(/[;,]/)) {
+          const name = raw.trim()
+          if (name && !seen.has(name.toLowerCase())) {
+            seen.add(name.toLowerCase())
+            orgs.push(name)
           }
         }
-        setAllOrgs(orgs.sort((a, b) => a.localeCompare(b)))
-      })
+      }
+      setAllOrgs(orgs.sort((a, b) => a.localeCompare(b)))
+    }).catch(() => {})
   }, [column])
 
   const matches = useMemo(() => {
@@ -1628,12 +1627,16 @@ function ProgramSearch({ onSelect }) {
     if (query.length < 2) { setResults([]); return }
     setLoading(true)
     const t = setTimeout(async () => {
-      const { data } = await supabase.from('programs')
-        .select('id, programme_name, country_iso, is_active, em_regulation, start_date')
-        .eq('status', 'approved')
-        .ilike('programme_name', `%${query}%`)
-        .limit(10)
-      setResults(data || [])
+      try {
+        const all = await fetchPrograms()
+        const q = query.toLowerCase()
+        const matches = all
+          .filter(p => p.status === 'approved' && p.programme_name?.toLowerCase().includes(q))
+          .slice(0, 10)
+        setResults(matches)
+      } catch {
+        setResults([])
+      }
       setLoading(false)
     }, 300)
     return () => clearTimeout(t)
@@ -1692,12 +1695,10 @@ export default function SubmitForm() {
 
   const set = key => value => setForm(f => ({ ...f, [key]: value }))
 
-  // Load a programme for editing: fetch full record, pre-populate form, jump to step 1
-  const selectForEdit = async (summary) => {
-    const { data, error } = await supabase.from('programs').select('*').eq('id', summary.id).single()
-    if (error || !data) return
-    setForm(formFromProgram(data))
-    setDuplicateResult({ id: data.id, name: data.programme_name })
+  // Load a programme for editing: find full record in cache, pre-populate form, jump to step 1
+  const selectForEdit = (summary) => {
+    setForm(formFromProgram(summary))
+    setDuplicateResult({ id: summary.id, name: summary.programme_name })
     setMode('edit')
     setStepId('contact')
   }
@@ -1856,15 +1857,23 @@ export default function SubmitForm() {
       ].filter(Boolean).join('\n\n') || null,
     }
 
-    let err
-    if (mode === 'edit') {
-      ;({ error: err } = await supabase.from('programs').update(payload).eq('id', duplicateResult.id))
-    } else {
-      ;({ error: err } = await supabase.from('programs').insert([{ ...payload, status: 'pending' }]))
+    try {
+      const body = mode === 'edit'
+        ? { ...payload, id: duplicateResult.id }
+        : payload
+      const res = await fetch('/.netlify/functions/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+      let json = {}
+      try { json = await res.json() } catch { /* non-JSON response e.g. local 404 */ }
+      if (!res.ok) throw new Error(json.error || `Server error ${res.status} — are the Netlify functions running?`)
+      setSubmitted(true)
+    } catch (e) {
+      setError(`${mode === 'edit' ? 'Update' : 'Submission'} failed: ${e.message}`)
     }
     setSubmitting(false)
-    if (err) setError(`${mode === 'edit' ? 'Update' : 'Submission'} failed: ${err.message}`)
-    else setSubmitted(true)
   }
 
   // ── Success ──────────────────────────────────────────────────────────────────
